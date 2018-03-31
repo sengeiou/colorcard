@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llyt_login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="40dp"
+        android:paddingLeft="26dp"
+        android:paddingTop="50dp"
+        android:text="注册"
+        android:textColor="#3A393E"
+        android:textSize="24sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="13dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/ic_mobile" />
+
+        <com.color.card.ui.widget.EditTextWithClear
+            android:id="@+id/etc_mobile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <View
+        style="@style/horizontal_line"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="23dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginLeft="3dp"
+            android:src="@drawable/ic_yanzhengma" />
+
+        <EditText
+            android:id="@+id/etc_yzm"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:minHeight="@dimen/item_rightbtnheight"
+            android:paddingLeft="@dimen/edittext_withclear_paddinglr"
+            android:paddingRight="@dimen/edittext_withclear_paddinglr"
+            android:singleLine="true"
+            android:textColor="@color/app_text_color"
+            android:textColorHint="@color/app_text_color3"
+            android:textCursorDrawable="@null"
+            android:textSize="@dimen/app_text_size2" />
+
+        <TextView
+            android:id="@+id/tv_yzm"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="8dp"
+            android:gravity="center_vertical"
+            android:text="获取验证码"
+            android:textColor="@color/app_main_color"
+            android:textSize="@dimen/app_text_size2" />
+    </LinearLayout>
+
+    <View
+        style="@style/horizontal_line"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp" />
+
+
+    <Button
+        android:id="@+id/btn_next"
+        style="@style/app_onebtn"
+        android:layout_marginBottom="60dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="50dp"
+        android:text="下一步" />
+
+
+</LinearLayout>

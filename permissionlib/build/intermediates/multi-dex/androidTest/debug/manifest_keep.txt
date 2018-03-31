@@ -1,0 +1,3 @@
+# Referenced at /Users/yqy/working/colorcard/permissionlib/build/intermediates/manifest/androidTest/debug/AndroidManifest.xml:9
+-keep class com.android.test.runner.MultiDexTestRunner { <init>(...); }
+

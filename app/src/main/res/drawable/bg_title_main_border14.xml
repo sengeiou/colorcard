@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true">
+        <shape>
+            <!-- 填充颜色 -->
+            <solid android:color="#FFFFFF" />
+            <!-- 线的宽度，颜色灰色 -->
+            <corners android:radius="14dp" />
+
+        </shape>
+    </item>
+    <item android:state_selected="false">
+        <shape>
+            <!-- 填充颜色 -->
+            <solid android:color="@color/transparent" />
+            <!-- 线的宽度，颜色灰色 -->
+            <corners android:radius="14dp" />
+        </shape>
+    </item>
+</selector>
