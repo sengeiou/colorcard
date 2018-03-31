@@ -28,7 +28,7 @@ public class HealthPointView extends View {
 
     private float startAngle = 120;
 
-    private float sweepAngle = 300;
+    private float sweepAngle = 270;
 
     // 刻度经过角度范围
     private float targetAngle = 0;
@@ -47,7 +47,9 @@ public class HealthPointView extends View {
     //判断是回退的状态还是前进状态
     private int state = 2;
 
-    private String stateText = "未检测";
+    private String stateText = "无检测";
+
+    private int totalCount = 100;//设置刻度的个数
 
     /**
      * 用来初始化画笔等
@@ -96,7 +98,7 @@ public class HealthPointView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         //画圆弧的方法
-        canvas.drawArc(oval, startAngle, sweepAngle, useCenter, paint);
+//        canvas.drawArc(oval, startAngle, sweepAngle, useCenter, paint);
         //画刻度线的方法
         drawViewLine(canvas);
         // 画刻度线内的内容
@@ -110,7 +112,7 @@ public class HealthPointView extends View {
         //移动canvas(X轴移动距离，Y轴移动距离)
         canvas.translate(radius, radius);
         //旋转坐标系
-        canvas.rotate(30);
+        canvas.rotate(45);
 
         Paint linePatin = new Paint();
         //设置画笔颜色
@@ -119,27 +121,40 @@ public class HealthPointView extends View {
         linePatin.setStrokeWidth(2);
         //设置画笔抗锯齿
         linePatin.setAntiAlias(true);
+
+
+        Paint linePatin2 = new Paint();
+        //设置画笔颜色
+        linePatin2.setColor(Color.WHITE);
+        //线宽
+        linePatin2.setStrokeWidth(2);
+        //设置画笔抗锯齿
+        linePatin.setAntiAlias(true);
         //确定每次旋转的角度
-        float rotateAngle = sweepAngle / 100;
+        float rotateAngle = sweepAngle / totalCount;
         //绘制有色部分的画笔
         Paint targetLinePatin = new Paint();
         targetLinePatin.setColor(Color.GREEN);
         targetLinePatin.setStrokeWidth(2);
         targetLinePatin.setAntiAlias(true);
         float hasDraw = 0;
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < totalCount + 1; i++) {
             if (hasDraw <= targetAngle && targetAngle != 0) {//需要绘制有色部分的时候
                 //计算已经绘制的比例
                 float percent = hasDraw / sweepAngle;
-                red = 255 - (int) (255 * percent);
-                green = (int) (255 * percent);
-                targetLinePatin.setARGB(255, red, green, 0);
+//                red = 255 - (int) (255 * percent);
+//                green = (int) (255 * percent);
+//                targetLinePatin.setARGB(255, red, green, 0);
+                targetLinePatin.setColor(Color.WHITE);
                 //画一条刻度线
-                canvas.drawLine(0, radius, 0, radius - 40, targetLinePatin);
+                targetLinePatin.setStrokeWidth(6);
+                canvas.drawLine(0, radius, 0, radius - 60, targetLinePatin);
             } else {//不需要绘制有色部分
                 //画一条刻度线
-                canvas.drawLine(0, radius, 0, radius - 40, linePatin);
+                canvas.drawLine(0, radius, 0, radius - 60, linePatin);
+
             }
+            canvas.drawLine(0, radius - 80, 0, radius - 100, linePatin2);
             hasDraw += rotateAngle;
             canvas.rotate(rotateAngle);
         }
@@ -207,8 +222,8 @@ public class HealthPointView extends View {
         Paint smallPaint = new Paint();
         smallPaint.setColor(Color.TRANSPARENT);
         // 画小圆指定圆心坐标，半径，画笔即可
-        int smallRadius = radius - 60;
-        canvas.drawCircle(radius, radius, radius - 60, smallPaint);
+        int smallRadius = radius - 200;
+        canvas.drawCircle(radius, radius, smallRadius, smallPaint);
         //绘制文本
         Paint textPaint = new Paint();
         //设置文本居中对齐
@@ -216,11 +231,11 @@ public class HealthPointView extends View {
         textPaint.setColor(Color.WHITE);
         textPaint.setTextSize(smallRadius / 2);
         //score需要通过计算得到
-        canvas.drawText(score + " ", radius, radius, textPaint);
+        canvas.drawText(score + ".0", radius, radius+smallRadius/6 , textPaint);
 
-        textPaint.setTextSize(smallRadius / 6);
+        textPaint.setTextSize(smallRadius / 4);
         //score需要通过计算得到
-        canvas.drawText("mmol/L", radius, radius + smallRadius / 4, textPaint);
+        canvas.drawText("mmol/L", radius, radius + smallRadius / 2, textPaint);
 //        //绘制分，在分数的右上方
 //        textPaint.setTextSize(smallRadius / 6);
 //        canvas.drawText("分", radius + smallRadius / 2, radius - smallRadius / 4, textPaint);

@@ -1,13 +1,17 @@
 package com.color.card;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.CalendarView;
 import android.widget.TextView;
 
 import com.color.card.mvp.base.BasePresenter;
+import com.color.card.ui.activity.TakePhotoActivity;
 import com.color.card.ui.base.BaseActivity;
 import com.color.card.ui.widget.HealthPointView;
 
@@ -24,6 +28,8 @@ public class MainActivity extends BaseActivity {
     private TextView tv_qick_check;
 
     private TextView tv_mine;
+
+    private CardView civ_camera;
 
     @Override
     public BasePresenter initPresenter() {
@@ -43,6 +49,7 @@ public class MainActivity extends BaseActivity {
         tv_mine = findViewById(R.id.tv_mine);
         tv_qick_check.setSelected(true);
         healthPointView = findViewById(R.id.hpv);
+        civ_camera = findViewById(R.id.civ_camera);
         healthPointView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,6 +65,23 @@ public class MainActivity extends BaseActivity {
         super.initEvent();
         tv_qick_check.setOnClickListener(this);
         tv_mine.setOnClickListener(this);
+        civ_camera.setOnClickListener(this);
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_qick_check:
+                break;
+            case R.id.tv_mine:
+                break;
+            case R.id.civ_camera:
+                startActivity(new Intent(this, TakePhotoActivity.class));
+                break;
+            default:
+                break;
+        }
     }
 
 }
