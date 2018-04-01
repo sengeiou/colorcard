@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/basemoudle/basemoudle.iml" filepath="$PROJECT_DIR$/basemoudle/basemoudle.iml" />
+      <module fileurl="file://$PROJECT_DIR$/colorcard.iml" filepath="$PROJECT_DIR$/colorcard.iml" />
+      <module fileurl="file://$PROJECT_DIR$/httpmoudle/httpmoudle.iml" filepath="$PROJECT_DIR$/httpmoudle/httpmoudle.iml" />
+      <module fileurl="file://$PROJECT_DIR$/permissionlib/permissionlib.iml" filepath="$PROJECT_DIR$/permissionlib/permissionlib.iml" />
+    </modules>
+  </component>
+</project>
