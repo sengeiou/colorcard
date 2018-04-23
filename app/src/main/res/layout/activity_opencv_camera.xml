@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.lyr.camera.OpencvCameraActivity">
+    <org.opencv.android.JavaCameraView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/tutorial2_activity_surface_view"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/tutorial2_activity_surface_view"
+        android:layout_marginBottom="8dp"
+
+        app:layout_constraintTop_toTopOf="@+id/tutorial2_activity_surface_view"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="@+id/tutorial2_activity_surface_view"
+        >
+        <CheckBox
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+                android:text="开始"
+                android:id="@+id/ISTART"
+            android:onClick="onTakePhto"
+            />
+
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

@@ -4,22 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="#F4F6F9"
     android:orientation="vertical"
     tools:context=".MainActivity">
+
 
     <com.color.card.ui.widget.crescentoimageview.CrescentoContainer
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#2ECE63"
         android:elevation="1dp"
         android:scaleType="centerCrop"
-        app:curvature="50dp"
+        app:curvature="80dp"
         app:curvatureDirection="outward">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#2ECE63"
             android:orientation="vertical">
 
             <LinearLayout
@@ -28,6 +29,7 @@
                 android:layout_marginBottom="12dp"
                 android:layout_marginTop="5dp"
                 android:orientation="horizontal"
+                android:layout_gravity="center"
                 android:paddingLeft="120dp"
                 android:paddingRight="120dp">
 
@@ -72,30 +74,72 @@
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
-            <com.color.card.ui.widget.HealthPointView
-                android:id="@+id/hpv"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:layout_marginLeft="60dp"
-                android:layout_marginRight="60dp" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="100dp"
+                android:gravity="center_horizontal"
+                android:paddingLeft="60dp"
+                android:paddingRight="60dp">
+
+                <com.color.card.ui.widget.HealthPointView
+                    android:id="@+id/hpv"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp" />
+            </LinearLayout>
         </LinearLayout>
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/civ_camera"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="-50dp"
-            android:elevation="1dp"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="22dp">
-
-            <TextView
-                android:layout_width="18dp"
-                android:layout_height="15dp"
-                android:layout_gravity="center"
-                android:background="@drawable/ic_camera" />
-        </android.support.v7.widget.CardView>
     </com.color.card.ui.widget.crescentoimageview.CrescentoContainer>
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/civ_camera"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="-90dp"
+        android:background="@color/white"
+        android:elevation="1dp"
+        app:cardCornerRadius="40dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="立即检测"
+            android:textColor="#2ECE63"
+            android:textSize="16sp" />
+    </android.support.v7.widget.CardView>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_weight="4"
+            android:background="#E2E1E5" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:gravity="center"
+            android:text="暂无数据"
+            android:textColor="#3A393E"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_weight="4"
+            android:background="#E2E1E5" />
+    </LinearLayout>
 
 </LinearLayout>
