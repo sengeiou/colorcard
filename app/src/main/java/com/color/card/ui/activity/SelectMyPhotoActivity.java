@@ -1,6 +1,5 @@
-package com.example.yqy.myapplication.ui.activity;
+package com.color.card.ui.activity;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -15,6 +14,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -24,22 +24,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import com.example.yqy.myapplication.R;
-import com.example.yqy.myapplication.entry.ImageFloderInfo;
-import com.example.yqy.myapplication.handler.WeakHandler;
-import com.example.yqy.myapplication.mvp.base.BasePresenter;
-import com.example.yqy.myapplication.ui.adapter.MultiItemTypeAdapter;
-import com.example.yqy.myapplication.ui.adapter.SelectMyPhotoAdapter;
-import com.example.yqy.myapplication.ui.base.BaseActivity;
-import com.example.yqy.myapplication.ui.popupwindow.ListImageDirPopupWindow;
-import com.example.yqy.myapplication.ui.widget.DividerGridItemDecoration;
-import com.example.yqy.myapplication.util.DensityUtils;
-import com.example.yqy.myapplication.util.ParameterUtils;
-import com.example.yqy.myapplication.util.SDCardUtils;
-import com.example.yqy.myapplication.util.ScreenUtils;
-import com.example.yqy.myapplication.util.Utils;
-import com.smartstudy.permissions.AppSettingsDialog;
+import com.color.card.R;
+import com.color.card.entity.ImageFloderInfo;
+import com.color.card.handler.WeakHandler;
+import com.color.card.mvp.base.BasePresenter;
+import com.color.card.ui.adapter.SelectMyPhotoAdapter;
+import com.color.card.ui.adapter.base.MultiItemTypeAdapter;
+import com.color.card.ui.base.BaseActivity;
+import com.color.card.ui.widget.ClipImageLayout;
+import com.color.card.ui.widget.ListImageDirPopupWindow;
+import com.color.card.ui.widget.decoration.DividerGridItemDecoration;
+import com.color.card.util.DensityUtils;
+import com.color.card.util.ScreenUtils;
+import com.color.card.util.Utils;
+import com.smartstudy.permissions.Permission;
 import com.smartstudy.permissions.PermissionUtil;
 
 import java.io.File;
@@ -50,17 +48,18 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
+import card.color.basemoudle.util.ParameterUtils;
+import card.color.basemoudle.util.SDCardUtils;
+
 /**
  * @author yqy
  */
-public class SelectMyPhotoActivity extends BaseActivity implements ListImageDirPopupWindow.OnImageDirSelected, PermissionUtil.PermissionCallbacks {
+public class SelectMyPhotoActivity extends BaseActivity<BasePresenter> implements ListImageDirPopupWindow.OnImageDirSelected {
 
     private TextView topdefault_centertitle;
-    private RelativeLayout top_select_myphoto;
     private TextView topdefault_righttext;
     private RecyclerView mGirdView;
     private TextView mChooseDir;
-    private AppSettingsDialog permissionDialog;
     private TextView mImageCount;
     private RelativeLayout id_bottom_ly;
 
@@ -95,7 +94,7 @@ public class SelectMyPhotoActivity extends BaseActivity implements ListImageDirP
     /**
      * 扫描拿到所有的图片文件夹
      */
-    private List<ImageFloderInfo> mImageFloders = new ArrayList<ImageFloderInfo>();
+    private List<ImageFloderInfo> mImageFloders = new ArrayList<>();
 
     int totalCount;
 
@@ -106,12 +105,13 @@ public class SelectMyPhotoActivity extends BaseActivity implements ListImageDirP
     private String firstImage = null;
     private Uri imageUri = null;
     private WeakHandler myHandler = null;
+    private File photoSaveFile;// 保存文件夹
+    private String photoSaveName = null;// 图片名
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select_my_photo);
-        setHeadVisible(View.GONE);
+        super.setContentView(R.layout.activity_select_my_photo);
     }
 
     @Override
@@ -123,12 +123,6 @@ public class SelectMyPhotoActivity extends BaseActivity implements ListImageDirP
         if (mImgs != null) {
             mImgs.clear();
             mImgs = null;
-        }
-
-
-        if (permissionDialog != null) {
-            permissionDialog.dialogDismiss();
-            permissionDialog = null;
         }
         if (mDirImgs != null) {
             mDirImgs.clear();
@@ -207,7 +201,6 @@ public class SelectMyPhotoActivity extends BaseActivity implements ListImageDirP
     @Override
     public void initView() {
         topdefault_centertitle = (TextView) findViewById(R.id.topdefault_centertitle);
-        top_select_myphoto = (RelativeLayout) findViewById(R.id.top_select_myphoto);
         topdefault_righttext = (TextView) findViewById(R.id.topdefault_righttext);
         mGirdView = (RecyclerView) findViewById(R.id.id_gridView);
         mGirdView.setHasFixedSize(true);
@@ -230,7 +223,6 @@ public class SelectMyPhotoActivity extends BaseActivity implements ListImageDirP
                 return false;
             }
         });
-        top_select_myphoto.getBackground().setAlpha(255);
         topdefault_centertitle.setText(getResources().getString(R.string.choose_pic));
         mScreenHeight = ScreenUtils.getScreenHeight();
         getImages();
@@ -244,22 +236,29 @@ public class SelectMyPhotoActivity extends BaseActivity implements ListImageDirP
                 public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                     if (ParameterUtils.ALL_PICS.equals(mChooseDir.getText().toString())) {
                         if (position == 0 && "".equals(mImgs.get(position))) {
-                            PermissionUtil.requestPermissions(SelectMyPhotoActivity.this, getString(R.string.permission_camera), ParameterUtils.REQUEST_CODE_CAMERA, Manifest.permission.CAMERA);
+                            if (PermissionUtil.hasPermissions(SelectMyPhotoActivity.this, Permission.CAMERA)) {
+                                toCamera();
+                            } else {
+                                PermissionUtil.requestPermissions(SelectMyPhotoActivity.this, Permission.getPermissionContent(Arrays.asList(Permission.CAMERA)),
+                                        ParameterUtils.REQUEST_CODE_CAMERA, Permission.CAMERA);
+                            }
                         } else {
                             String photo_path = mImgs.get(position);
-                            Intent toClipImage = new Intent();
-                            toClipImage.putExtra("path", photo_path);
-                            toClipImage.putExtra("flag_from", "from_album");
-                            setResult(RESULT_OK, toClipImage);
-                            finish();
+                            if (!TextUtils.isEmpty(photo_path)) {
+                                Intent toClipImage = new Intent(SelectMyPhotoActivity.this, ClipPictureActivity.class);
+                                toClipImage.putExtra("path", photo_path);
+                                toClipImage.putExtra("clipType", ClipImageLayout.SQUARE);
+                                startActivityForResult(toClipImage, ParameterUtils.REQUEST_CODE_CLIP_OVER);
+                            } else {
+                                showTip(getString(R.string.picture_load_failure));
+                            }
                         }
                     } else {
                         String photo_path = mDirImgs.get(position);
-                        Intent toClipImage = new Intent();
+                        Intent toClipImage = new Intent(SelectMyPhotoActivity.this, ClipPictureActivity.class);
                         toClipImage.putExtra("path", photo_path);
-                        toClipImage.putExtra("flag_from", "from_album");
-                        setResult(RESULT_OK, toClipImage);
-                        finish();
+                        toClipImage.putExtra("clipType", ClipImageLayout.SQUARE);
+                        startActivityForResult(toClipImage, ParameterUtils.REQUEST_CODE_CLIP_OVER);
                     }
                 }
 
@@ -276,7 +275,12 @@ public class SelectMyPhotoActivity extends BaseActivity implements ListImageDirP
                 public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                     if (ParameterUtils.ALL_PICS.equals(mChooseDir.getText().toString())) {
                         if (position == 0 && "".equals(mImgs.get(position))) {
-                            PermissionUtil.requestPermissions(SelectMyPhotoActivity.this, getString(R.string.permission_camera), ParameterUtils.REQUEST_CODE_CAMERA, Manifest.permission.CAMERA);
+                            if (PermissionUtil.hasPermissions(SelectMyPhotoActivity.this, Permission.CAMERA)) {
+                                toCamera();
+                            } else {
+                                PermissionUtil.requestPermissions(SelectMyPhotoActivity.this, Permission.getPermissionContent(Arrays.asList(Permission.CAMERA)),
+                                        ParameterUtils.REQUEST_CODE_CAMERA, Permission.CAMERA);
+                            }
                         }
                     }
                 }
@@ -478,12 +482,25 @@ public class SelectMyPhotoActivity extends BaseActivity implements ListImageDirP
         }
         switch (requestCode) {
             case ParameterUtils.REQUEST_CODE_CAMERA:
-                Intent localIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, imageUri);
-                sendBroadcast(localIntent);
-                mImgs.removeFirst();
-                mImgs.addFirst(imageUri.getPath());
-                mImgs.addFirst("");
-                mAdapter.notifyDataSetChanged();
+                if (imageUri != null) {
+                    Intent localIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, imageUri);
+                    sendBroadcast(localIntent);
+                    mImgs.removeFirst();
+                    mImgs.addFirst(imageUri.getPath());
+                    mImgs.addFirst("");
+                    mAdapter.notifyDataSetChanged();
+                    imageUri = null;
+                } else {
+                    String path_capture = photoSaveFile.getAbsolutePath() + "/" + photoSaveName;
+                    Intent toClipImage = new Intent(SelectMyPhotoActivity.this, ClipPictureActivity.class);
+                    toClipImage.putExtra("path", path_capture);
+                    toClipImage.putExtra("clipType", ClipImageLayout.SQUARE);
+                    startActivityForResult(toClipImage, ParameterUtils.REQUEST_CODE_CLIP_OVER);
+                }
+                break;
+            case ParameterUtils.REQUEST_CODE_CLIP_OVER:
+                setResult(RESULT_OK, data);
+                finish();
                 break;
             default:
                 break;
@@ -499,22 +516,7 @@ public class SelectMyPhotoActivity extends BaseActivity implements ListImageDirP
     public void onPermissionsGranted(int requestCode, List<String> perms) {
         switch (requestCode) {
             case ParameterUtils.REQUEST_CODE_CAMERA:
-                if (getIntent().getBooleanExtra("singlePic", true)) {
-                    Intent toTakePhoto = new Intent();
-                    toTakePhoto.putExtra("flag_from", "from_capture");
-                    setResult(RESULT_OK, toTakePhoto);
-                    finish();
-                } else {
-                    String photoSaveName = System.currentTimeMillis() + ".png";
-                    File photoSaveFile = SDCardUtils.getFileDirPath("Xxd" + File.separator + "pictures");// 存放照片的文件夹
-                    Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    if (photoSaveFile != null) {
-                        imageUri = Uri.fromFile(new File(photoSaveFile.getAbsolutePath(), photoSaveName));
-                    }
-                    openCameraIntent.putExtra(MediaStore.Images.Media.ORIENTATION, 0);
-                    openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                    startActivityForResult(openCameraIntent, ParameterUtils.REQUEST_CODE_CAMERA);
-                }
+                toCamera();
                 break;
             default:
                 break;
@@ -523,21 +525,26 @@ public class SelectMyPhotoActivity extends BaseActivity implements ListImageDirP
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
-        verifyPermission(perms, getString(R.string.permission_camera), Manifest.permission.CAMERA);
+        verifyPermission(perms);
     }
 
-
-    public void verifyPermission(List<String> Denyperms, String tips, String... requestPerms) {
-        if (!PermissionUtil.hasPermissions(this, requestPerms)) {
-            if (PermissionUtil.somePermissionPermanentlyDenied(this, Denyperms)) {
-                if (permissionDialog == null) {
-                    permissionDialog = new AppSettingsDialog.Builder(this).build(tips);
-                }
-                permissionDialog.dialogDismiss();
-                permissionDialog.show();
+    private void toCamera() {
+        if (getIntent().getBooleanExtra("singlePic", true)) {
+            photoSaveName = System.currentTimeMillis() + ".png";
+            // 存放照片的文件夹
+            photoSaveFile = SDCardUtils.getFileDirPath("Xxd_im" + File.separator + "pictures");
+            Utils.startActionCapture(SelectMyPhotoActivity.this, new File(photoSaveFile.getAbsolutePath(), photoSaveName), ParameterUtils.REQUEST_CODE_CAMERA);
+        } else {
+            photoSaveName = System.currentTimeMillis() + ".png";
+            // 存放照片的文件夹
+            photoSaveFile = SDCardUtils.getFileDirPath("Xxd_im" + File.separator + "pictures");
+            Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (photoSaveFile != null) {
+                imageUri = Uri.fromFile(new File(photoSaveFile.getAbsolutePath(), photoSaveName));
             }
+            openCameraIntent.putExtra(MediaStore.Images.Media.ORIENTATION, 0);
+            openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+            startActivityForResult(openCameraIntent, ParameterUtils.REQUEST_CODE_CAMERA);
         }
     }
-
-
 }

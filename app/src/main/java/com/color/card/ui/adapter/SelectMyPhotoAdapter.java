@@ -1,4 +1,4 @@
-package com.smartstudy.counselor_t.ui.adapter;
+package com.color.card.ui.adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,10 +10,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.color.card.R;
+import com.color.card.ui.adapter.base.CommonAdapter;
+import com.color.card.ui.adapter.base.ViewHolder;
+import com.color.card.util.Utils;
 
-import com.smartstudy.counselor_t.R;
-import com.smartstudy.counselor_t.ui.adapter.base.ViewHolder;
-import com.smartstudy.counselor_t.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;

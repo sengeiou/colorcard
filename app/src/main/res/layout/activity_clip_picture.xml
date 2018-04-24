@@ -9,7 +9,7 @@
         android:id="@+id/my_top_clip"
         layout="@layout/app_top_default" />
 
-    <com.example.yqy.myapplication.ui.widget.ClipImageLayout
+    <com.color.card.ui.widget.ClipImageLayout
         android:id="@+id/id_clipImageLayout_circle"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -17,7 +17,7 @@
         android:tag="circle"
         android:visibility="gone" />
 
-    <com.example.yqy.myapplication.ui.widget.ClipImageLayout
+    <com.color.card.ui.widget.ClipImageLayout
         android:id="@+id/id_clipImageLayout_square"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

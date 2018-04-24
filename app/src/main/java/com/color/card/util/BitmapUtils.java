@@ -1,4 +1,4 @@
-package com.example.yqy.myapplication.util;
+package com.color.card.util;
 
 import android.content.Context;
 import android.content.Intent;

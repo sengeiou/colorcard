@@ -1,4 +1,4 @@
-package com.smartstudy.commonlib.base.config.https;
+package com.color.card.base.config.https;
 
 import android.util.Log;
 

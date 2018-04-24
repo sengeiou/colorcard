@@ -1,6 +1,10 @@
 package com.color.card.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -12,6 +16,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.util.Log;
 import android.view.Display;
@@ -25,6 +30,8 @@ import android.widget.TextView;
 import com.color.card.R;
 import com.color.card.mvp.base.BasePresenter;
 import com.color.card.ui.base.BaseActivity;
+import com.color.card.util.PhotoUtil;
+import com.color.card.util.ToastUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -36,20 +43,24 @@ import java.util.List;
 public class TakePhotoActivity extends BaseActivity implements SurfaceHolder.Callback,
         View.OnClickListener, Camera.PictureCallback {
     private SurfaceView mSurfaceView;
-    //    private ImageView mIvStart;
+
     private TextView mTvCountDown;
 
     private SurfaceHolder mHolder;
 
     private Camera mCamera;
 
+    private ImageView cancel;
+
     private Handler mHandler = new Handler();
 
-    private int mCurrentTimer = 180;
+    private int mCurrentTimer = 10;
 
     private boolean mIsSurfaceCreated = false;
     private boolean mIsTimerRunning = false;
     private TextView count_down;
+    private ProgressDialog mProgressDialog;
+    String filePath = "";
 
     //  private static final int CAMERA_ID = 1; //前置摄像头
     private static final String TAG = TakePhotoActivity.class.getSimpleName();
@@ -62,6 +73,10 @@ public class TakePhotoActivity extends BaseActivity implements SurfaceHolder.Cal
         setContentView(R.layout.activity_take_photo);
         initView();
         initEvent();
+        if (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO)) {
+            ToastUtils.shortToast(this,"没有拍照权限");
+            finish();
+        }
     }
 
     @Override
@@ -76,18 +91,19 @@ public class TakePhotoActivity extends BaseActivity implements SurfaceHolder.Cal
     }
 
 
+    @Override
     public void initEvent() {
         mHolder = mSurfaceView.getHolder();
         mHolder.addCallback(this);
-//        mIvStart.setOnClickListener(this);
+        cancel.setOnClickListener(this);
     }
 
     @Override
     public void initView() {
         mSurfaceView = (SurfaceView) findViewById(R.id.surface_view);
-//        mIvStart = (ImageView) findViewById(R.id.start);
         mTvCountDown = (TextView) findViewById(R.id.count_down);
         count_down = findViewById(R.id.count_down);
+        cancel = findViewById(R.id.cancel);
         getHeadView().setVisibility(View.GONE);
         if (!mIsTimerRunning) {
             mIsTimerRunning = true;
@@ -116,36 +132,18 @@ public class TakePhotoActivity extends BaseActivity implements SurfaceHolder.Cal
             Log.d(TAG, "startPreview will return");
             return;
         }
-
+//        int cameraNums = Camera.getNumberOfCameras();
         mCamera = Camera.open(CAMERA_ID);
 
-        Camera.Parameters parameters = mCamera.getParameters();
-        int width = 0;
-        int height = 0;
 
+        Camera.Parameters parameters = mCamera.getParameters();
+
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels;
+        Camera.Size size = getBestPreviewSize(width, height, parameters);
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);//获取窗口的管理器
         Display display = wm.getDefaultDisplay();//获得窗口里面的屏幕
 
-        // 选择合适的预览尺寸
-        List<Camera.Size> sizeList = parameters.getSupportedPreviewSizes();
-
-        // 如果sizeList只有一个我们也没有必要做什么了，因为就他一个别无选择
-        if (sizeList.size() > 1) {
-            Iterator<Camera.Size> itor = sizeList.iterator();
-            while (itor.hasNext()) {
-                Camera.Size cur = itor.next();
-                if (cur.width >= width
-                        && cur.height >= height) {
-                    width = cur.width;
-                    height = cur.height;
-                    break;
-                }
-            }
-        }
-
-        parameters.setPreviewSize(width, height); //获得摄像区域的大小
-
-        Camera.Size size = getBestPreviewSize(width, height, parameters);
         if (size != null) {
             //设置预览分辨率
             parameters.setPreviewSize(size.width, size.height);
@@ -214,7 +212,12 @@ public class TakePhotoActivity extends BaseActivity implements SurfaceHolder.Cal
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.start:
+                break;
 
+            case R.id.cancel:
+                finish();
+                break;
+            default:
                 break;
         }
     }
@@ -230,12 +233,12 @@ public class TakePhotoActivity extends BaseActivity implements SurfaceHolder.Cal
                 mHandler.postDelayed(timerRunnable, 1000);
             } else {
                 mTvCountDown.setText("");
-
+                mTvCountDown.setBackground(null);
                 mCamera.takePicture(null, null, null, TakePhotoActivity.this);
                 playSound();
-
                 mIsTimerRunning = false;
-                mCurrentTimer = 180;
+                mCurrentTimer = 10;
+                mProgressDialog = ProgressDialog.show(TakePhotoActivity.this, null, "正在获取数据");
             }
         }
     };
@@ -243,10 +246,15 @@ public class TakePhotoActivity extends BaseActivity implements SurfaceHolder.Cal
 
     @Override
     public void onPictureTaken(byte[] data, Camera camera) {
+
         try {
-            FileOutputStream fos = new FileOutputStream(new File
-                    (Environment.getExternalStorageDirectory() + File.separator +
-                            System.currentTimeMillis() + ".png"));
+            filePath = Environment.getExternalStorageDirectory() + File.separator +
+                    System.currentTimeMillis() + ".png";
+
+//            filePath= Environment.getExternalStorageDirectory()
+//                    + File.separator + Environment.DIRECTORY_DCIM
+//                    +File.separator+"Camera"+File.separator;
+            FileOutputStream fos = new FileOutputStream(new File(filePath));
 
             //旋转角度，保证保存的图片方向是对的
             Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
@@ -257,13 +265,21 @@ public class TakePhotoActivity extends BaseActivity implements SurfaceHolder.Cal
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.flush();
             fos.close();
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         mCamera.startPreview();
+        Intent intent = new Intent();
+        intent.putExtra("filePath", filePath);
+        intent.setClass(TakePhotoActivity.this, ResultDetailActivity.class);
+        startActivity(intent);
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+        finish();
     }
 
 
@@ -276,9 +292,10 @@ public class TakePhotoActivity extends BaseActivity implements SurfaceHolder.Cal
         int volume = audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION);
 
         if (volume != 0) {
-            if (mediaPlayer == null)
+            if (mediaPlayer == null) {
                 mediaPlayer = MediaPlayer.create(this,
                         Uri.parse("file:///system/media/audio/ui/camera_click.ogg"));
+            }
             if (mediaPlayer != null) {
                 mediaPlayer.start();
             }

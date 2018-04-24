@@ -1,4 +1,4 @@
-package com.smartstudy.commonlib.ui.adapter.base;
+package com.color.card.ui.adapter.base;
 
 import android.support.v4.view.ViewCompat;
 import android.view.View;

@@ -1,4 +1,4 @@
-package com.smartstudy.counselor_t.ui.base;
+package com.color.card.ui.base;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,7 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.smartstudy.counselor_t.mvp.base.BasePresenter;
+import com.color.card.mvp.base.BasePresenter;
+
 
 /**
  * @author yqy

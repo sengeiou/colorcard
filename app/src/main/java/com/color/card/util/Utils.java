@@ -1,4 +1,4 @@
-package com.smartstudy.counselor_t.util;
+package com.color.card.util;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -32,7 +32,6 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.smartstudy.counselor_t.app.BaseApplication;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -45,6 +44,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import card.color.basemoudle.BaseApplication;
+import card.color.basemoudle.util.AppUtils;
+import card.color.basemoudle.util.DeviceUtils;
+import card.color.basemoudle.util.ParameterUtils;
+import card.color.basemoudle.util.SPCacheUtils;
 
 
 /**

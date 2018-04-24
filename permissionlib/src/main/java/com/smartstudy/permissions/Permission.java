@@ -110,6 +110,7 @@ public class Permission {
                     content += "，" + "录音";
                 }
             }
+
             if (Arrays.asList(PHONE).contains(perm)) {
                 if (!content.contains("电话")) {
                     content += "，" + "电话";
@@ -132,7 +133,7 @@ public class Permission {
             }
         }
         if (!TextUtils.isEmpty(content)) {
-            content = "请在设置－应用－选校帝－权限管理中开启" + content.substring(1) + "权限，以正常使用选校帝功能服务";
+            content = "请在设置－应用－colorCard－权限管理中开启" + content.substring(1) + "权限，以正常使用功能服务";
         }
         return content;
     }

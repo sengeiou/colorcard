@@ -1,4 +1,4 @@
-package com.smartstudy.counselor_t.entity;
+package com.color.card.entity;
 
 public class ImageFloderInfo {
     /**

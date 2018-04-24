@@ -1,2 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="hl_padding_out">30</string>
+    <string name="hl_left">90</string>
+    <string name="hl_in_padding">110</string>
+    <string name="hl_in_padding_out">150</string>
+    <string name="hl_in_padding2">130</string>
+    <string name="hl_stroke_hight">8</string>
+    <string name="hl_stroke_gray">4</string>
+    <string name="hl_stroke_hight2">12</string>
+
+    <string name="hl_value_padding">500</string>
+    <string name="hl_unit_padding">580</string>
+    <string name="hl_state_padding">700</string>
+
+
+</resources>

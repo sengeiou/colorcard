@@ -1,8 +1,9 @@
-package com.smartstudy.commonlib.ui.adapter.base;
+package com.color.card.ui.adapter.base;
 
 import android.support.v7.widget.RecyclerView;
 
-import com.smartstudy.commonlib.ui.customview.treeview.TreeItemGroup;
+
+import com.color.card.ui.widget.treeview.TreeItemGroup;
 
 import java.util.List;
 

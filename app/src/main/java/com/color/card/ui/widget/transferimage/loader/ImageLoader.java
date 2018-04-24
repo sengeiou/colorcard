@@ -1,4 +1,4 @@
-package com.smartstudy.commonlib.ui.customview.transferimage.loader;
+package com.color.card.ui.widget.transferimage.loader;
 
 import android.graphics.drawable.Drawable;
 import android.support.annotation.UiThread;

@@ -49,4 +49,9 @@
     <color name="home_top_bg_start">#078CF1</color> <!-- 首页渐变色起始颜色 -->
     <color name="user_rate_clor">#FFB400</color> <!-- 录取率测试结果用户录取率颜色 -->
     <color name="bg_guide_color">#E9FAFF</color> <!-- 引导页背景颜色 -->
+
+
+    <color name="bg_ll_green">#2ECE63</color>
+    <color name="bg_ll_ordrange">#FD792F</color>
+    <color name="bg_ll_red">#F04F41</color>
 </resources>

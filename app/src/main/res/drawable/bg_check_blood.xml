@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
 
-</selector>
+    <!-- 实心 -->
+    <solid android:color="#29C15C"/>
+
+    <!-- 圆角 -->
+    <corners android:radius="8dp"/>
+    <!-- 边距 -->
+    <padding
+        android:top="15dp"
+        android:bottom="15dp"
+        android:left="40dp"
+        android:right="40dp"/>
+
+</shape>

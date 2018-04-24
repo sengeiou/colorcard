@@ -10,10 +10,14 @@ android {
         targetSdkVersion rootProject.ext.android.targetSdkVersion
         versionCode rootProject.ext.android.versionCode
         versionName rootProject.ext.android.versionName
-        ndk {
-            //选择要添加的对应cpu类型的.so库。
-            abiFilters 'armeabi', 'armeabi-v7a', 'x86'
+        externalNativeBuild {
+            cmake {
+                abiFilters 'x86', 'armeabi', 'armeabi-v7a'
+//                abiFilters 'x86'
+                cppFlags "-frtti -fexceptions"
+            }
         }
+
     }
     buildTypes {
         release {
@@ -24,15 +28,22 @@ android {
 
     sourceSets {
         main {
-            jniLibs.srcDirs = ['libs']
+            jniLibs.srcDirs = ['src/main/sdk/native/libs']
         }
     }
+
+
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile rootProject.ext.dependencies.support
-    compile rootProject.ext.dependencies.glide
     compile rootProject.ext.dependencies.retrofit
     compile rootProject.ext.dependencies.rxandroid
     compile rootProject.ext.dependencies.rxjava
@@ -41,6 +52,12 @@ dependencies {
     compile rootProject.ext.dependencies.palette
     compile rootProject.ext.dependencies.adapterrxjava
     compile rootProject.ext.dependencies.recyclerview
+    compile rootProject.ext.dependencies.glide_okhttp
+    compile rootProject.ext.dependencies.glide
+    compile rootProject.ext.dependencies.greenrobot
     compile project(path: ':httpmoudle')
     compile project(path: ':permissionlib')
+    compile 'com.github.donkingliang:LabelsView:1.2.0'
+    compile project(':openCVLibrary24135')
+    compile project(path: ':oss-android-sdk')
 }

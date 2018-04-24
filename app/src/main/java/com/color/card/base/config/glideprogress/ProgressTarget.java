@@ -1,12 +1,12 @@
-package com.smartstudy.commonlib.base.config.glideprogress;
+package com.color.card.base.config.glideprogress;
 
 import android.graphics.drawable.Drawable;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.Target;
-import com.smartstudy.commonlib.base.config.GlideConfiguration;
-import com.smartstudy.commonlib.ui.customview.transferimage.loader.ImageLoader;
+import com.color.card.base.config.GlideConfiguration;
+import com.color.card.ui.widget.transferimage.loader.ImageLoader;
 
 /**
  * Created by louis on 2017/3/1.

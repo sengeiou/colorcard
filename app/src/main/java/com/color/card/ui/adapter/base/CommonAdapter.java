@@ -1,7 +1,8 @@
-package com.smartstudy.commonlib.ui.adapter.base;
+package com.color.card.ui.adapter.base;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+
 
 import java.util.List;
 

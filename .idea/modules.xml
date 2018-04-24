@@ -6,6 +6,8 @@
       <module fileurl="file://$PROJECT_DIR$/basemoudle/basemoudle.iml" filepath="$PROJECT_DIR$/basemoudle/basemoudle.iml" />
       <module fileurl="file://$PROJECT_DIR$/colorcard.iml" filepath="$PROJECT_DIR$/colorcard.iml" />
       <module fileurl="file://$PROJECT_DIR$/httpmoudle/httpmoudle.iml" filepath="$PROJECT_DIR$/httpmoudle/httpmoudle.iml" />
+      <module fileurl="file://$PROJECT_DIR$/openCVLibrary24135/openCVLibrary24135.iml" filepath="$PROJECT_DIR$/openCVLibrary24135/openCVLibrary24135.iml" />
+      <module fileurl="file://$PROJECT_DIR$/oss-android-sdk/oss-android-sdk.iml" filepath="$PROJECT_DIR$/oss-android-sdk/oss-android-sdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/permissionlib/permissionlib.iml" filepath="$PROJECT_DIR$/permissionlib/permissionlib.iml" />
     </modules>
   </component>

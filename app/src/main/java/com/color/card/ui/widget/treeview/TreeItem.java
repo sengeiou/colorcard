@@ -1,8 +1,8 @@
-package com.smartstudy.commonlib.ui.customview.treeview;
+package com.color.card.ui.widget.treeview;
 
 import android.support.annotation.Nullable;
 
-import com.smartstudy.commonlib.ui.adapter.base.BaseItem;
+import com.color.card.ui.adapter.base.BaseItem;
 
 
 /**

@@ -12,6 +12,7 @@ import android.support.annotation.RequiresApi;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
@@ -33,6 +34,7 @@ import com.color.card.mvp.presenter.LoginPresenter;
 import com.color.card.ui.base.BaseActivity;
 import com.color.card.ui.widget.EditTextWithClear;
 import com.color.card.util.DensityUtils;
+import com.color.card.util.HandleUtil;
 import com.color.card.util.KeyBoardUtils;
 import com.color.card.util.ToastUtils;
 
@@ -51,6 +53,7 @@ import card.color.basemoudle.util.SPCacheUtils;
  */
 public class LoginActivity extends BaseActivity<LoginContract.Presenter> implements LoginContract.View {
     private EditTextWithClear etcmobile;
+
     private EditText etc_password;
     private EditText etc_code;
     private Button btn_login;
@@ -71,6 +74,7 @@ public class LoginActivity extends BaseActivity<LoginContract.Presenter> impleme
 
     @Override
     public void initView() {
+        presenter.loginAutomatic();
         setHeadVisible(View.GONE);
         btn_login = _id(R.id.btn_login);
         etcmobile = _id(R.id.etc_mobile);
@@ -83,6 +87,7 @@ public class LoginActivity extends BaseActivity<LoginContract.Presenter> impleme
         if (!ConstantUtils.CACHE_NULL.equals(account)) {
             etcmobile.setText(account);
         }
+
     }
 
     @Override
@@ -130,7 +135,18 @@ public class LoginActivity extends BaseActivity<LoginContract.Presenter> impleme
 
     @Override
     public void phoneCodeLoginSuccess() {
+        presenter.getUserInfo();
         startActivity(new Intent(this, MainActivity.class));
         finish();
+    }
+
+    @Override
+    public void getUserInfoSuccess() {
+
+    }
+
+    @Override
+    public void loginAutomaticSuccess() {
+
     }
 }

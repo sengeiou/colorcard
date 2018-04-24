@@ -1,4 +1,4 @@
-package com.smartstudy.commonlib.base.config;
+package com.color.card.base.config;
 
 import java.util.Map;
 

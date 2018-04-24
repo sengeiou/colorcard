@@ -1,6 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<!-- Copyright (C) 2014 Fonpit AG
+
+     Creative Commons Attribution 2.5 License:
+     http://creativecommons.org/licenses/by/2.5/
+ -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/main_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/iv_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="主颜色"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-condensed"/>
+
+    <LinearLayout
+        android:id="@+id/dominant_color"
+        android:layout_width="96dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        tools:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="颜色出现次数排序"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-condensed"/>
+
+    <LinearLayout
+        android:id="@+id/palette"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Will be filled dinamically with swatches -->
+
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="距离标准色差的间距"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-condensed"/>
+
+    <TextView
+        android:id="@+id/tv_distance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-condensed"/>
+    <Button
+        android:id="@+id/bt_jump"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="图片选择"/>
 
 </LinearLayout>

@@ -22,44 +22,27 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="46dp"
+        android:layout_height="55dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="50dp"
         android:orientation="horizontal"
-        android:paddingLeft="40dp"
-        android:paddingRight="40dp">
+        android:paddingLeft="60dp"
+        android:paddingRight="60dp">
 
         <TextView
             android:id="@+id/tv_clickenter"
+            android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
+            android:layout_height="55dp"
             android:layout_centerHorizontal="true"
             android:layout_weight="1"
             android:background="@drawable/bg_app_trans_btn_blue_border70"
             android:gravity="center"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:text="登录"
-            android:textColor="@color/app_main_color"
-            android:textSize="20sp" />
-
-        <View
-            android:layout_width="50dp"
-            android:layout_height="46dp" />
-
-        <TextView
-            android:id="@+id/tv_registerr"
-            android:layout_width="match_parent"
-            android:layout_height="46dp"
-            android:layout_centerHorizontal="true"
-            android:layout_weight="1"
-            android:background="@drawable/bg_app_trans_btn_blue_border70"
-            android:gravity="center"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="注册"
-            android:textColor="@color/app_main_color"
-            android:textSize="20sp" />
+            android:text="立即体验"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -1,1 +1,1 @@
-include ':app', ':httpmoudle', ':basemoudle', ':permissionlib'
+include ':app', ':httpmoudle', ':basemoudle', ':permissionlib', ':openCVLibrary24135', ':oss-android-sdk'

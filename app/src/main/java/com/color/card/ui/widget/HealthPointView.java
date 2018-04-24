@@ -7,8 +7,13 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
+import com.color.card.R;
+import com.color.card.util.DensityUtils;
+
+import java.text.DecimalFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -37,10 +42,12 @@ public class HealthPointView extends View {
 
     private int red;
 
-    private int score;
+    private String score = "0.0";
 
     private int green;
     private boolean useCenter = false;
+
+    public static final double maxNumber = 40;
 
     //判断是否在动
     private boolean isRunning;
@@ -49,7 +56,11 @@ public class HealthPointView extends View {
 
     private String stateText = "无检测";
 
-    private int totalCount = 100;//设置刻度的个数
+    private int totalCount = 80;//设置刻度的个数
+
+
+    private float trueAngle;
+
 
     /**
      * 用来初始化画笔等
@@ -116,18 +127,18 @@ public class HealthPointView extends View {
 
         Paint linePatin = new Paint();
         //设置画笔颜色
-        linePatin.setColor(Color.WHITE);
+        linePatin.setColor(Color.parseColor("#4cFFFFFF"));
         //线宽
-        linePatin.setStrokeWidth(2);
+        linePatin.setStrokeWidth(Integer.parseInt(getContext().getString(R.string.hl_stroke_hight)));
         //设置画笔抗锯齿
         linePatin.setAntiAlias(true);
 
 
         Paint linePatin2 = new Paint();
         //设置画笔颜色
-        linePatin2.setColor(Color.WHITE);
+        linePatin2.setColor(Color.parseColor("#4cFFFFFF"));
         //线宽
-        linePatin2.setStrokeWidth(2);
+        linePatin2.setStrokeWidth(Integer.parseInt(getContext().getString(R.string.hl_stroke_hight)));
         //设置画笔抗锯齿
         linePatin.setAntiAlias(true);
         //确定每次旋转的角度
@@ -135,10 +146,11 @@ public class HealthPointView extends View {
         //绘制有色部分的画笔
         Paint targetLinePatin = new Paint();
         targetLinePatin.setColor(Color.GREEN);
-        targetLinePatin.setStrokeWidth(2);
+        targetLinePatin.setStrokeWidth(Integer.parseInt(getContext().getString(R.string.hl_stroke_gray)));
         targetLinePatin.setAntiAlias(true);
         float hasDraw = 0;
         for (int i = 0; i < totalCount + 1; i++) {
+
             if (hasDraw <= targetAngle && targetAngle != 0) {//需要绘制有色部分的时候
                 //计算已经绘制的比例
                 float percent = hasDraw / sweepAngle;
@@ -147,14 +159,22 @@ public class HealthPointView extends View {
 //                targetLinePatin.setARGB(255, red, green, 0);
                 targetLinePatin.setColor(Color.WHITE);
                 //画一条刻度线
-                targetLinePatin.setStrokeWidth(6);
-                canvas.drawLine(0, radius, 0, radius - 60, targetLinePatin);
+                targetLinePatin.setStrokeWidth(Integer.parseInt(getContext().getString(R.string.hl_stroke_hight)));
+                if (((hasDraw + rotateAngle - 0.1) >= trueAngle)) {
+                    targetLinePatin.setStrokeWidth(Integer.parseInt(getContext().getString(R.string.hl_stroke_hight2)));
+                    canvas.drawLine(0, radius, 0, radius - Float.parseFloat(getContext().getString(R.string.hl_left)), targetLinePatin);
+                } else {
+                    canvas.drawLine(0, radius - Float.parseFloat(getContext().getString(R.string.hl_padding_out)), 0, radius - Float.parseFloat(getContext().getString(R.string.hl_left)), targetLinePatin);
+                }
             } else {//不需要绘制有色部分
                 //画一条刻度线
-                canvas.drawLine(0, radius, 0, radius - 60, linePatin);
-
+                canvas.drawLine(0, radius - Float.parseFloat(getContext().getString(R.string.hl_padding_out)), 0, radius - Float.parseFloat(getContext().getString(R.string.hl_left)), linePatin);
             }
-            canvas.drawLine(0, radius - 80, 0, radius - 100, linePatin2);
+            if (i == 8 || i == 14 || i == 18) {
+                canvas.drawLine(0, radius - Float.parseFloat(getContext().getString(R.string.hl_in_padding)), 0, radius - Float.parseFloat(getContext().getString(R.string.hl_in_padding_out)), linePatin2);
+            } else {
+                canvas.drawLine(0, radius - Float.parseFloat(getContext().getString(R.string.hl_in_padding)), 0, radius - Float.parseFloat(getContext().getString(R.string.hl_in_padding2)), linePatin2);
+            }
             hasDraw += rotateAngle;
             canvas.rotate(rotateAngle);
         }
@@ -163,10 +183,11 @@ public class HealthPointView extends View {
     }
 
 
-    public void changeAngle(final float trueAngle) {
+    public void changeAngle(final float trueAngle, final String score1, final String scoreText1) {
         if (isRunning) {//如果在动直接返回
             return;
         }
+        this.trueAngle = trueAngle;
         final Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -174,12 +195,9 @@ public class HealthPointView extends View {
                 switch (state) {
                     case 1://后退状态
                         isRunning = true;
-                        targetAngle -= 3;
-                        if (targetAngle <= 0) {//如果回退到0
-                            targetAngle = 0;
-                            //改为前进状态
-                            state = 2;
-                        }
+                        targetAngle = 0;
+                        //改为前进状态
+                        state = 2;
                         break;
                     case 2://前进状态
                         targetAngle += 3;
@@ -196,15 +214,18 @@ public class HealthPointView extends View {
                         break;
                 }
                 // 计算当前比例应该的多少分
-                score = (int) (targetAngle / 300 * 30);
+//                score = (targetAngle / 270 * 20);
+                score = score1;
+                stateText = scoreText1;
+//                if (score < 10) {
+//                    stateText = "偏低";
+//                } else if (10 <= score && score < 20) {
+//                    stateText = "正常";
+//                } else {
+//                    stateText = "偏高";
+//                }
+//                score = scoreText;
 
-                if (score < 10) {
-                    stateText = "偏低";
-                } else if (10 <= score && score < 20) {
-                    stateText = "正常";
-                } else {
-                    stateText = "偏高";
-                }
                 //重新绘制（子线程中使用的方法）
                 postInvalidate();
             }
@@ -229,19 +250,19 @@ public class HealthPointView extends View {
         //设置文本居中对齐
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setColor(Color.WHITE);
-        textPaint.setTextSize(smallRadius / 2);
+        textPaint.setTextSize(DensityUtils.sp2px(60));
         //score需要通过计算得到
-        canvas.drawText(score + ".0", radius, radius+smallRadius/6 , textPaint);
+        canvas.drawText(score, radius, Float.parseFloat(getContext().getString(R.string.hl_value_padding)), textPaint);
 
-        textPaint.setTextSize(smallRadius / 4);
+        textPaint.setTextSize(DensityUtils.sp2px(18));
         //score需要通过计算得到
-        canvas.drawText("mmol/L", radius, radius + smallRadius / 2, textPaint);
+        canvas.drawText("mmol/L", radius, Float.parseFloat(getContext().getString(R.string.hl_unit_padding)), textPaint);
 //        //绘制分，在分数的右上方
 //        textPaint.setTextSize(smallRadius / 6);
 //        canvas.drawText("分", radius + smallRadius / 2, radius - smallRadius / 4, textPaint);
         //绘制点击优化在分数的下方
-        textPaint.setTextSize(smallRadius / 4);
-        canvas.drawText(stateText, radius, radius + smallRadius, textPaint);
+        textPaint.setTextSize(DensityUtils.sp2px(18));
+        canvas.drawText(stateText, radius, Float.parseFloat(getContext().getString(R.string.hl_state_padding)), textPaint);
     }
 
 }

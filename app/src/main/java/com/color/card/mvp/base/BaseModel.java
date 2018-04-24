@@ -9,6 +9,7 @@ import com.color.card.listener.ObserverListener;
 import java.util.HashMap;
 import java.util.Map;
 
+import card.color.basemoudle.util.SPCacheUtils;
 import card.color.httpmoudle.entity.ResponseInfo;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -21,38 +22,41 @@ public class BaseModel {
 
     protected void apiSubscribe(Observable observable, final ObserverListener listener) {
         observable.subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ResponseInfo>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        listener.onSubscribe(d);
-                    }
+            .unsubscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Observer<ResponseInfo>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+                    listener.onSubscribe(d);
+                }
 
-                    @Override
-                    public void onNext(ResponseInfo responseInfo) {
-                        if (responseInfo != null) {
-                            Log.d("result======", responseInfo.toString());
-                        }
-                        if (responseInfo.isSuccess()) {
-                            listener.onNext(responseInfo.getModel());
-                        } else {
-                            listener.onError(responseInfo.getMsgInfo());
-                        }
+                @Override
+                public void onNext(ResponseInfo responseInfo) {
+                    if (!responseInfo.getCount().equals("0")) {
+                        SPCacheUtils.put("count", responseInfo.getCount());
                     }
+                    if (responseInfo != null) {
+                        Log.d("result======", responseInfo.toString());
+                    }
+                    if (responseInfo.isSuccess()) {
+                        listener.onNext(responseInfo.getModel());
+                    } else {
+                        listener.onError(responseInfo.getMsgInfo());
+                    }
+                }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        if (!TextUtils.isEmpty(e.getMessage())) {
-                            listener.onError(e.getMessage());
-                        }
+                @Override
+                public void onError(Throwable e) {
+                    if (!TextUtils.isEmpty(e.getMessage())) {
+                        listener.onError(e.getMessage());
                     }
+                }
 
-                    @Override
-                    public void onComplete() {
-                        Log.d("complete=====", "");
-                    }
-                });
+                @Override
+                public void onComplete() {
+                    Log.d("complete=====", "");
+                }
+            });
     }
 
     protected Map<String, String> getHeadersMap() {

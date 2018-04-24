@@ -1,4 +1,4 @@
-package com.smartstudy.commonlib.ui.customview;
+package com.color.card.ui.widget;
 
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
@@ -6,7 +6,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
-import com.smartstudy.commonlib.ui.adapter.wrapper.LoadMoreWrapper;
+import com.color.card.ui.adapter.wrapper.LoadMoreWrapper;
+
 
 /**
  * Created by louis on 2017/3/3.

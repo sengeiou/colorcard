@@ -39,7 +39,35 @@ public class TokenUtil {
         return MD5Util.getMD5String(md5 + security);
     }
 
-    public static TreeMap<String, String> getParameterMap(Map<String,Object> params) {
+    public static TreeMap<String, String> getParameterMap(Map<String, String> params) {
+        TreeMap<String, String> returnMap = new TreeMap<String, String>();
+        Iterator<?> entries = params.entrySet().iterator();
+        Map.Entry entry;
+        String name = "";
+        String value = "";
+        while (entries.hasNext()) {
+            entry = (Map.Entry) entries.next();
+            name = (String) entry.getKey();
+            Object valueObj = entry.getValue();
+            if (null == valueObj) {
+                value = "";
+            } else if (valueObj instanceof String[]) {
+
+                String[] values = (String[]) valueObj;
+                for (int i = 0; i < values.length; i++) {
+                    value = values[i] + ",";
+                }
+                value = value.substring(0, value.length() - 1);
+            } else {
+                value = valueObj.toString();
+            }
+            returnMap.put(name, value);
+        }
+        return returnMap;
+    }
+
+
+    public static TreeMap<String, String> getParameterMap2(Map<String, String[]> params) {
         TreeMap<String, String> returnMap = new TreeMap<String, String>();
         Iterator<?> entries = params.entrySet().iterator();
         Map.Entry entry;

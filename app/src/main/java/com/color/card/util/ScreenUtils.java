@@ -1,4 +1,4 @@
-package com.smartstudy.counselor_t.util;
+package com.color.card.util;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,7 +8,8 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.smartstudy.counselor_t.app.BaseApplication;
+import card.color.basemoudle.BaseApplication;
+
 
 //获得屏幕相关的辅助类
 public class ScreenUtils {

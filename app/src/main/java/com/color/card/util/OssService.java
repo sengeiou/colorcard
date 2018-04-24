@@ -1,4 +1,4 @@
-package com.alibaba.sdk.android.oss.sample.customprovider;
+package com.color.card.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,7 +8,6 @@ import com.alibaba.sdk.android.oss.ClientException;
 import com.alibaba.sdk.android.oss.OSS;
 import com.alibaba.sdk.android.oss.OSSClient;
 import com.alibaba.sdk.android.oss.ServiceException;
-import com.alibaba.sdk.android.oss.app.Config;
 import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
 import com.alibaba.sdk.android.oss.callback.OSSProgressCallback;
 import com.alibaba.sdk.android.oss.common.OSSLog;
@@ -35,9 +34,12 @@ import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.alibaba.sdk.android.oss.model.ResumableUploadRequest;
 import com.alibaba.sdk.android.oss.model.ResumableUploadResult;
-import com.alibaba.sdk.android.oss.network.OSSRequestTask;
 import com.alibaba.sdk.android.oss.model.TriggerCallbackRequest;
 import com.alibaba.sdk.android.oss.model.TriggerCallbackResult;
+import com.color.card.entity.DataListEntity;
+import com.color.card.entity.UserAvatarInfo;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,14 +59,12 @@ public class OssService {
 
     public OSS mOss;
     private String mBucket;
-    private UIDisplayer mDisplayer;
     private String mCallbackAddress;
     private static String mResumableObjectKey = "resumableObject";
 
-    public OssService(OSS oss, String bucket, UIDisplayer uiDisplayer) {
+    public OssService(OSS oss, String bucket) {
         this.mOss = oss;
         this.mBucket = bucket;
-        this.mDisplayer = uiDisplayer;
     }
 
     public void setBucketName(String bucket) {
@@ -94,8 +94,6 @@ public class OssService {
             public void onProgress(GetObjectRequest request, long currentSize, long totalSize) {
                 Log.d("GetObject", "currentSize: " + currentSize + " totalSize: " + totalSize);
                 int progress = (int) (100 * currentSize / totalSize);
-                mDisplayer.updateProgress(progress);
-                mDisplayer.displayInfo("下载进度: " + String.valueOf(progress) + "%");
             }
         });
         OSSAsyncTask task = mOss.asyncGetObject(get, new OSSCompletedCallback<GetObjectRequest, GetObjectResult>() {
@@ -105,16 +103,16 @@ public class OssService {
 
                 InputStream inputStream = result.getObjectContent();
                 //Bitmap bm = BitmapFactory.decodeStream(inputStream);
-                try {
-                    //需要根据对应的View大小来自适应缩放
-                    Bitmap bm = mDisplayer.autoResizeFromStream(inputStream);
-                    long get_end = System.currentTimeMillis();
-                    OSSLog.logDebug("get cost: " + (get_end - get_start) / 1000f);
-                    mDisplayer.downloadComplete(bm);
-                    mDisplayer.displayInfo("Bucket: " + mBucket + "\nObject: " + request.getObjectKey() + "\nRequestId: " + result.getRequestId());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+//                try {
+                //需要根据对应的View大小来自适应缩放
+//                    Bitmap bm = mDisplayer.autoResizeFromStream(inputStream);
+//                    long get_end = System.currentTimeMillis();
+//                    OSSLog.logDebug("get cost: " + (get_end - get_start) / 1000f);
+//                    mDisplayer.downloadComplete(bm);
+//                    mDisplayer.displayInfo("Bucket: " + mBucket + "\nObject: " + request.getObjectKey() + "\nRequestId: " + result.getRequestId());
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
             }
 
             @Override
@@ -134,14 +132,14 @@ public class OssService {
                     Log.e("RawMessage", serviceException.getRawMessage());
                     info = serviceException.toString();
                 }
-                mDisplayer.downloadFail(info);
-                mDisplayer.displayInfo(info);
+//                mDisplayer.downloadFail(info);
+//                mDisplayer.displayInfo(info);
             }
         });
     }
 
 
-    public void asyncPutImage(String object, String localFile) {
+    public void asyncPutImage(String object, File localFile) {
         final long upload_start = System.currentTimeMillis();
 
         if (object.equals("")) {
@@ -149,16 +147,19 @@ public class OssService {
             return;
         }
 
-        File file = new File(localFile);
-        if (!file.exists()) {
-            Log.w("AsyncPutImage", "FileNotExist");
-            Log.w("LocalFile", localFile);
+//        File file = new File(localFile);
+//        if (!file.exists()) {
+//            Log.w("AsyncPutImage", "FileNotExist");
+//            Log.w("LocalFile", localFile);
+//            return;
+//        }
+
+        if (!localFile.exists()) {
             return;
         }
 
-
         // 构造上传请求
-        PutObjectRequest put = new PutObjectRequest(mBucket, object, localFile);
+        PutObjectRequest put = new PutObjectRequest(mBucket, object, localFile.getAbsolutePath());
         put.setCRC64(OSSRequest.CRC64Config.YES);
         if (mCallbackAddress != null) {
             // 传入对应的上传回调参数，这里默认使用OSS提供的公共测试回调服务器地址
@@ -177,8 +178,8 @@ public class OssService {
             public void onProgress(PutObjectRequest request, long currentSize, long totalSize) {
                 Log.d("PutObject", "currentSize: " + currentSize + " totalSize: " + totalSize);
                 int progress = (int) (100 * currentSize / totalSize);
-                mDisplayer.updateProgress(progress);
-                mDisplayer.displayInfo("上传进度: " + String.valueOf(progress) + "%");
+//                mDisplayer.updateProgress(progress);
+//                mDisplayer.displayInfo("上传进度: " + String.valueOf(progress) + "%");
             }
         });
 
@@ -192,16 +193,17 @@ public class OssService {
 
                 long upload_end = System.currentTimeMillis();
                 OSSLog.logDebug("upload cost: " + (upload_end - upload_start) / 1000f);
-                mDisplayer.uploadComplete();
-                mDisplayer.displayInfo("Bucket: " + mBucket
-                    + "\nObject: " + request.getObjectKey()
-                    + "\nETag: " + result.getETag()
-                    + "\nRequestId: " + result.getRequestId()
-                    + "\nCallback: " + result.getServerCallbackReturnBody());
-                Log.w("kim", "re=====" + mBucket);
-                Log.w("kim", "re=====" + request.getObjectKey());
-                Log.w("kim", "re=====" + result.getETag());
-                Log.w("kim", "re=====" + result.getServerCallbackReturnBody());
+//                mDisplayer.uploadComplete();
+//                mDisplayer.displayInfo("Bucket: " + mBucket
+//                    + "\nObject: " + request.getObjectKey()
+//                    + "\nETag: " + result.getETag()
+//                    + "\nRequestId: " + result.getRequestId()
+//                    + "\nCallback: " + result.getServerCallbackReturnBody());
+                EventBus.getDefault().post(new UserAvatarInfo(request.getObjectKey()));
+//                Log.w("kim", "re=====" + mBucket);
+//                Log.w("kim", "re=====" + request.getObjectKey());
+//                Log.w("kim", "re=====" + result.getETag());
+//                Log.w("kim", "re=====" + result.getServerCallbackReturnBody());
             }
 
             @Override
@@ -221,8 +223,8 @@ public class OssService {
                     Log.e("RawMessage", serviceException.getRawMessage());
                     info = serviceException.toString();
                 }
-                mDisplayer.uploadFail(info);
-                mDisplayer.displayInfo(info);
+//                mDisplayer.uploadFail(info);
+//                mDisplayer.displayInfo(info);
             }
         });
     }
@@ -243,7 +245,7 @@ public class OssService {
                     info += "\n" + String.format("object: %s %s %s", result.getObjectSummaries().get(i).getKey(), result.getObjectSummaries().get(i).getETag(), result.getObjectSummaries().get(i).getLastModified().toString());
                     OSSLog.logDebug("AyncListObjects", info);
                 }
-                mDisplayer.displayInfo(info);
+//                mDisplayer.displayInfo(info);
             }
 
             @Override
@@ -260,8 +262,8 @@ public class OssService {
                     OSSLog.logError("HostId", serviceException.getHostId());
                     OSSLog.logError("RawMessage", serviceException.getRawMessage());
                 }
-                mDisplayer.downloadFail("Failed!");
-                mDisplayer.displayInfo(serviceException.toString());
+//                mDisplayer.downloadFail("Failed!");
+//                mDisplayer.displayInfo(serviceException.toString());
             }
         });
     }
@@ -277,7 +279,7 @@ public class OssService {
                 OSSLog.logDebug("headObject", "object Size: " + result.getMetadata().getContentLength());
                 OSSLog.logDebug("headObject", "object Content Type: " + result.getMetadata().getContentType());
 
-                mDisplayer.displayInfo(result.toString());
+//                mDisplayer.displayInfo(result.toString());
             }
 
             @Override
@@ -294,8 +296,8 @@ public class OssService {
                     OSSLog.logError("HostId", serviceException.getHostId());
                     OSSLog.logError("RawMessage", serviceException.getRawMessage());
                 }
-                mDisplayer.downloadFail("Failed!");
-                mDisplayer.displayInfo(serviceException.toString());
+//                mDisplayer.downloadFail("Failed!");
+//                mDisplayer.displayInfo(serviceException.toString());
             }
         });
     }
@@ -314,16 +316,16 @@ public class OssService {
         mOss.asyncMultipartUpload(request, new OSSCompletedCallback<MultipartUploadRequest, CompleteMultipartUploadResult>() {
             @Override
             public void onSuccess(MultipartUploadRequest request, CompleteMultipartUploadResult result) {
-                mDisplayer.uploadComplete();
-                mDisplayer.displayInfo(request.toString());
+//                mDisplayer.uploadComplete();
+//                mDisplayer.displayInfo(request.toString());
             }
 
             @Override
             public void onFailure(MultipartUploadRequest request, ClientException clientException, ServiceException serviceException) {
                 if (clientException != null) {
-                    mDisplayer.displayInfo(clientException.toString());
+//                    mDisplayer.displayInfo(clientException.toString());
                 } else if (serviceException != null) {
-                    mDisplayer.displayInfo(serviceException.toString());
+//                    mDisplayer.displayInfo(serviceException.toString());
                 }
 
             }
@@ -337,23 +339,23 @@ public class OssService {
             public void onProgress(ResumableUploadRequest request, long currentSize, long totalSize) {
                 Log.d("GetObject", "currentSize: " + currentSize + " totalSize: " + totalSize);
                 int progress = (int) (100 * currentSize / totalSize);
-                mDisplayer.updateProgress(progress);
-                mDisplayer.displayInfo("上传进度: " + String.valueOf(progress) + "%");
+//                mDisplayer.updateProgress(progress);
+//                mDisplayer.displayInfo("上传进度: " + String.valueOf(progress) + "%");
             }
         });
         OSSAsyncTask task = mOss.asyncResumableUpload(request, new OSSCompletedCallback<ResumableUploadRequest, ResumableUploadResult>() {
             @Override
             public void onSuccess(ResumableUploadRequest request, ResumableUploadResult result) {
-                mDisplayer.uploadComplete();
-                mDisplayer.displayInfo(request.toString());
+//                mDisplayer.uploadComplete();
+//                mDisplayer.displayInfo(request.toString());
             }
 
             @Override
             public void onFailure(ResumableUploadRequest request, ClientException clientException, ServiceException serviceException) {
                 if (clientException != null) {
-                    mDisplayer.displayInfo(clientException.toString());
+//                    mDisplayer.displayInfo(clientException.toString());
                 } else if (serviceException != null) {
-                    mDisplayer.displayInfo(serviceException.toString());
+//                    mDisplayer.displayInfo(serviceException.toString());
                 }
             }
         });
@@ -377,18 +379,18 @@ public class OssService {
 
                     if (resp.code() == 200) {
                         OSSLog.logDebug("signContrainedURL", "object size: " + resp.body().contentLength());
-                        mDisplayer.displayInfo(resp.toString());
+//                        mDisplayer.displayInfo(resp.toString());
                     } else {
                         OSSLog.logDebug("signContrainedURL", "get object failed, error code: " + resp.code()
                             + "error message: " + resp.message());
-                        mDisplayer.displayInfo(resp.toString());
+//                        mDisplayer.displayInfo(resp.toString());
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    mDisplayer.displayInfo(e.toString());
+//                    mDisplayer.displayInfo(e.toString());
                 } catch (ClientException e) {
                     e.printStackTrace();
-                    mDisplayer.displayInfo(e.toString());
+//                    mDisplayer.displayInfo(e.toString());
                 }
             }
         }).start();
@@ -407,10 +409,10 @@ public class OssService {
             mOss.createBucket(createBucketRequest);
         } catch (ClientException clientException) {
             clientException.printStackTrace();
-            mDisplayer.displayInfo(clientException.toString());
+//            mDisplayer.displayInfo(clientException.toString());
         } catch (ServiceException serviceException) {
             serviceException.printStackTrace();
-            mDisplayer.displayInfo(serviceException.toString());
+//            mDisplayer.displayInfo(serviceException.toString());
         }
 
         PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, "test-file", filePath);
@@ -426,7 +428,7 @@ public class OssService {
             @Override
             public void onSuccess(DeleteBucketRequest request, DeleteBucketResult result) {
                 OSSLog.logDebug("DeleteBucket", "Success!");
-                mDisplayer.displayInfo(result.toString());
+//                mDisplayer.displayInfo(result.toString());
             }
 
             @Override
@@ -435,7 +437,7 @@ public class OssService {
                 if (clientException != null) {
                     // client side exception,  such as network exception
                     clientException.printStackTrace();
-                    mDisplayer.displayInfo(clientException.toString());
+//                    mDisplayer.displayInfo(clientException.toString());
                 }
                 if (serviceException != null) {
                     // The bucket to delete is not empty.
@@ -455,15 +457,15 @@ public class OssService {
                             mOss.deleteBucket(deleteBucketRequest1);
                         } catch (ClientException clientexception) {
                             clientexception.printStackTrace();
-                            mDisplayer.displayInfo(clientexception.toString());
+//                            mDisplayer.displayInfo(clientexception.toString());
                             return;
                         } catch (ServiceException serviceexception) {
                             serviceexception.printStackTrace();
-                            mDisplayer.displayInfo(serviceexception.toString());
+//                            mDisplayer.displayInfo(serviceexception.toString());
                             return;
                         }
                         OSSLog.logDebug("DeleteBucket", "Success!");
-                        mDisplayer.displayInfo("The Operation of Deleting Bucket is successed!");
+//                        mDisplayer.displayInfo("The Operation of Deleting Bucket is successed!");
                     }
                 }
             }
@@ -492,22 +494,22 @@ public class OssService {
             public void onProgress(GetObjectRequest request, long currentSize, long totalSize) {
                 Log.d("GetObject", "currentSize: " + currentSize + " totalSize: " + totalSize);
                 int progress = (int) (100 * currentSize / totalSize);
-                mDisplayer.updateProgress(progress);
-                mDisplayer.displayInfo("下载进度: " + String.valueOf(progress) + "%");
+//                mDisplayer.updateProgress(progress);
+//                mDisplayer.displayInfo("下载进度: " + String.valueOf(progress) + "%");
             }
         });
         OSSAsyncTask task = tClient.asyncGetObject(get, new OSSCompletedCallback<GetObjectRequest, GetObjectResult>() {
             @Override
             public void onSuccess(GetObjectRequest request, GetObjectResult result) {
-                mDisplayer.displayInfo("使用自签名获取网络对象成功！");
+//                mDisplayer.displayInfo("使用自签名获取网络对象成功！");
             }
 
             @Override
             public void onFailure(GetObjectRequest request, ClientException clientException, ServiceException serviceException) {
                 if (clientException != null) {
-                    mDisplayer.displayInfo(clientException.toString());
+//                    mDisplayer.displayInfo(clientException.toString());
                 } else if (serviceException != null) {
-                    mDisplayer.displayInfo(serviceException.toString());
+//                    mDisplayer.displayInfo(serviceException.toString());
                 }
             }
         });
@@ -530,15 +532,15 @@ public class OssService {
         OSSAsyncTask task = tClient.asyncTriggerCallback(request, new OSSCompletedCallback<TriggerCallbackRequest, TriggerCallbackResult>() {
             @Override
             public void onSuccess(TriggerCallbackRequest request, TriggerCallbackResult result) {
-                mDisplayer.displayInfo(result.getServerCallbackReturnBody());
+//                mDisplayer.displayInfo(result.getServerCallbackReturnBody());
             }
 
             @Override
             public void onFailure(TriggerCallbackRequest request, ClientException clientException, ServiceException serviceException) {
                 if (clientException != null) {
-                    mDisplayer.displayInfo(clientException.toString());
+//                    mDisplayer.displayInfo(clientException.toString());
                 } else if (serviceException != null) {
-                    mDisplayer.displayInfo(serviceException.toString());
+//                    mDisplayer.displayInfo(serviceException.toString());
                 }
             }
         });
@@ -558,9 +560,9 @@ public class OssService {
             @Override
             public void onFailure(ImagePersistRequest request, ClientException clientException, ServiceException serviceException) {
                 if (clientException != null) {
-                    mDisplayer.displayInfo(clientException.toString());
+//                    mDisplayer.displayInfo(clientException.toString());
                 } else if (serviceException != null) {
-                    mDisplayer.displayInfo(serviceException.toString());
+//                    mDisplayer.displayInfo(serviceException.toString());
                 }
             }
         });

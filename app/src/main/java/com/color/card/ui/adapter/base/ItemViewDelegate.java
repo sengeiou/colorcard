@@ -1,4 +1,4 @@
-package com.smartstudy.commonlib.ui.adapter.base;
+package com.color.card.ui.adapter.base;
 
 
 /**

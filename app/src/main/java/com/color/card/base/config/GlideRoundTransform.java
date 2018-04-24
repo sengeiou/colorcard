@@ -1,4 +1,4 @@
-package com.smartstudy.commonlib.base.config;
+package com.color.card.base.config;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -9,7 +9,7 @@ import android.graphics.RectF;
 
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
-import com.smartstudy.commonlib.utils.DensityUtils;
+import com.color.card.util.DensityUtils;
 
 /**
  * Created by louis on 17/7/26.

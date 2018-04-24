@@ -41,9 +41,16 @@
     <string name="visit_count">%1$s人看过</string>
     <string name="qa_detail_title">问题详情</string>
 
+    <string name="hl_padding_out">8</string>
     <string name="hl_left">24</string>
     <string name="hl_in_padding">30</string>
     <string name="hl_in_padding_out">40</string>
     <string name="hl_in_padding2">35</string>
+    <string name="hl_stroke_hight">4</string>
+    <string name="hl_stroke_gray">2</string>
+    <string name="hl_stroke_hight2">6</string>
 
+    <string name="hl_value_padding">195</string>
+    <string name="hl_unit_padding">222</string>
+    <string name="hl_state_padding">266</string>
 </resources>

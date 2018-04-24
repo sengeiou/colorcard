@@ -11,6 +11,12 @@
         <item name="android:windowBackground">@null</item>
     </style>
 
+    <!-- 可点击变色rlyt列表样式 -->
+    <style name="clickable_simple_item_rlyt" parent="@style/simple_item_rlyt">
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/simple_item_bg</item>
+    </style>
+
     <!-- app全局通栏按钮样式 -->
     <style name="app_onebtn">
         <item name="android:layout_width">match_parent</item>

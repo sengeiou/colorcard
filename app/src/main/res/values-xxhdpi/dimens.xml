@@ -1,2 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <dimen name="bq_left">8dp</dimen>
+    <dimen name="bq_right">30dp</dimen>
+    <dimen name="lineMargin">11dp</dimen>
+    <dimen name="labelTextPaddingLeft">8dp</dimen>
+</resources>

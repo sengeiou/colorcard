@@ -1,4 +1,4 @@
-package com.smartstudy.counselor_t.ui.popupwindow;
+package com.color.card.ui.widget;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -6,11 +6,11 @@ import android.view.View;
 import android.widget.ImageView;
 
 
-import com.smartstudy.counselor_t.R;
-import com.smartstudy.counselor_t.entity.ImageFloderInfo;
-import com.smartstudy.counselor_t.ui.adapter.CommonAdapter;
-import com.smartstudy.counselor_t.ui.adapter.MultiItemTypeAdapter;
-import com.smartstudy.counselor_t.ui.adapter.base.ViewHolder;
+import com.color.card.R;
+import com.color.card.entity.ImageFloderInfo;
+import com.color.card.ui.adapter.base.CommonAdapter;
+import com.color.card.ui.adapter.base.MultiItemTypeAdapter;
+import com.color.card.ui.adapter.base.ViewHolder;
 
 import java.util.List;
 

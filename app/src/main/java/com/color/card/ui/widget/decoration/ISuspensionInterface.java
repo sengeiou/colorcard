@@ -1,4 +1,4 @@
-package com.smartstudy.commonlib.ui.customview.decoration;
+package com.color.card.ui.widget.decoration;
 
 /**
  * 分类悬停的接口

@@ -19,11 +19,10 @@
 
             <ImageView
                 android:id="@+id/topdefault_leftbutton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="8dp"
+                android:layout_height="13dp"
                 android:layout_marginRight="5dp"
                 android:clickable="true"
-                android:paddingRight="@dimen/app_top_right_btn_marginleftright"
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_go_back" />
 

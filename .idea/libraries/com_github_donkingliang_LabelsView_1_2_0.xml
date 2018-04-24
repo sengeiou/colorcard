@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="com.github.donkingliang:LabelsView-1.2.0">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/LabelsView-1.2.0.aar/ad592189ed0f1e72e9f1752af77b37b1/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/LabelsView-1.2.0.aar/ad592189ed0f1e72e9f1752af77b37b1/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/LabelsView-1.2.0.aar/a6bc438289cbe344591b15834c7a7421/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/LabelsView-1.2.0.aar/a6bc438289cbe344591b15834c7a7421/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

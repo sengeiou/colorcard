@@ -1,4 +1,4 @@
-package com.example.yqy.myapplication;/*
+package com.color.card.util;/*
  * Copyright (C) 2015 Henrique Rocha
  * Copyright (C) 2014 Fonpit AG
  *

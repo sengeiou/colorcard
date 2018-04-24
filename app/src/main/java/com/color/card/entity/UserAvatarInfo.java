@@ -8,4 +8,18 @@ package com.color.card.entity;
  * @email yeqingyu@innobuddy.com
  */
 public class UserAvatarInfo {
+    private String key;
+
+    public UserAvatarInfo(String key) {
+        this.key = key;
+    }
+
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 }

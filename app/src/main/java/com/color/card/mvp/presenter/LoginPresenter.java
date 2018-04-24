@@ -58,4 +58,54 @@ public class LoginPresenter extends BasePresenterImpl<LoginContract.View> implem
             }
         });
     }
+
+    @Override
+    public void getUserInfo() {
+        loginModel.getUserInfo(new ObserverListener<String>() {
+            @Override
+            public void onSubscribe(Disposable disposable) {
+                addDisposable(disposable);
+            }
+
+            @Override
+            public void onNext(String result) {
+                JSONObject data = JSON.parseObject(result);
+                if (data != null) {
+                    String realname = data.getString("realname");
+                    SPCacheUtils.put("realname", realname);
+                }
+            }
+
+            @Override
+            public void onError(String msg) {
+                view.showTip(msg);
+            }
+        });
+    }
+
+    @Override
+    public void loginAutomatic() {
+        loginModel.getLoginaAutomatic(new ObserverListener<String>() {
+            @Override
+            public void onSubscribe(Disposable disposable) {
+                addDisposable(disposable);
+            }
+
+            @Override
+            public void onNext(String result) {
+                JSONObject data = JSON.parseObject(result);
+                if (data != null) {
+                    String sessionId = data.getString("sessionId");
+                    SPCacheUtils.put("sessionId", sessionId);
+
+                }
+                view.phoneCodeLoginSuccess();
+            }
+
+            @Override
+            public void onError(String msg) {
+                view.showTip(msg);
+            }
+        });
+    }
 }

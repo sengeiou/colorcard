@@ -1,9 +1,10 @@
-package com.smartstudy.commonlib.ui.customview.treeview;
+package com.color.card.ui.widget.treeview;
 
 import android.support.annotation.Nullable;
 
-import com.smartstudy.commonlib.ui.adapter.base.BaseItem;
-import com.smartstudy.commonlib.ui.adapter.base.TreeRecyclerViewType;
+
+import com.color.card.ui.adapter.base.BaseItem;
+import com.color.card.ui.adapter.base.TreeRecyclerViewType;
 
 import java.util.List;
 
@@ -13,8 +14,7 @@ import java.util.List;
  * //子集可以是parent,也可以是child
  */
 
-public abstract class TreeItemGroup<D> extends TreeItem<D>
-        implements TreeParent {
+public abstract class TreeItemGroup<D> extends TreeItem<D> implements TreeParent {
     /**
      * 持有的子item
      */

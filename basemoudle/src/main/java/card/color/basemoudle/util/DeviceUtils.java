@@ -1,4 +1,4 @@
-package com.smartstudy.commonlib.utils;
+package card.color.basemoudle.util;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -8,6 +8,8 @@ import android.os.Build;
 import android.telephony.TelephonyManager;
 
 import java.util.UUID;
+
+import card.color.basemoudle.util.ParameterUtils;
 
 /**
  * 获取设备信息
@@ -51,7 +53,7 @@ public class DeviceUtils {
                 Build.TAGS.length() % 10 + Build.TYPE.length() % 10 +
                 Build.USER.length() % 10; //13 位
         try {
-            serial = android.os.Build.class.getField("SERIAL").get(null).toString();
+            serial = Build.class.getField("SERIAL").get(null).toString();
             //API>=9 使用serial号
             return new UUID(m_szDevIDShort.hashCode(), serial.hashCode()).toString();
         } catch (Exception exception) {

@@ -55,6 +55,12 @@
     <!-- 收藏页时间文字大小 -->
     <dimen name="app_text_size7">11sp</dimen>
 
+    <dimen name="hl_left">24</dimen>
+
+    <dimen name="bq_left">6dp</dimen>
+    <dimen name="bq_right">30dp</dimen>
+    <dimen name="lineMargin">10dp</dimen>
+    <dimen name="labelTextPaddingLeft">6dp</dimen>
 
 
 </resources>

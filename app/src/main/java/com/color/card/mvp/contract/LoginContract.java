@@ -13,11 +13,20 @@ import com.color.card.mvp.base.BaseView;
 public interface LoginContract {
     interface View extends BaseView {
         void phoneCodeLoginSuccess();
+
+        void getUserInfoSuccess();
+
+        void loginAutomaticSuccess();
     }
+
 
     interface Presenter extends BasePresenter {
 
         void login(String phone, String code, String password);
+
+        void getUserInfo();
+
+        void loginAutomatic();
 
     }
 }

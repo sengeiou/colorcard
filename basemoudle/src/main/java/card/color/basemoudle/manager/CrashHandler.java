@@ -1,5 +1,5 @@
 
-package com.smartstudy.counselor_t.base.manager;
+package card.color.basemoudle.manager;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -10,7 +10,6 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.smartstudy.counselor_t.util.SDCardUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,12 +23,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import card.color.basemoudle.util.SDCardUtils;
 
-/**
- * UncaughtException处理类,当程序发生Uncaught异常的时候,有该类来接管程序
- *
- * @author luoyongming
- */
+
 public class CrashHandler implements UncaughtExceptionHandler {
     public static final String TAG = CrashHandler.class.getName();
 
@@ -48,7 +44,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
     /**
      * 保证只有一个CrashHandler实例
      */
-    private CrashHandler() {
+    public CrashHandler() {
     }
 
     /**
@@ -193,7 +189,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
             // crash日志文件名
             String fileName = "xxd_" + time + "_" + timestamp + ".log";
             // 保存日志文件的相对目录
-            File dir = SDCardUtils.getFileDirPath("xxd_im/crash");
+            File dir = SDCardUtils.getFileDirPath("color_card/crash");
             FileOutputStream fos = new FileOutputStream(dir.getAbsolutePath() + File.separator + fileName);
             fos.write(sb.toString().getBytes());
             fos.close();

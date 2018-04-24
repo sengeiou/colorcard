@@ -55,8 +55,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     private View topLine;
     protected boolean hasBasePer = false;
     protected P presenter;
-//    private static String[] mDenyPerms = StringUtis.concatAll(
-//            Permission.STORAGE, Permission.PHONE, Permission.MICROPHONE);
+    private static String[] mDenyPerms = StringUtis.concatAll(
+            Permission.STORAGE, Permission.CAMERA);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,15 +77,15 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
 
     @AfterPermissionGranted(ParameterUtils.REQUEST_CODE_PERMISSIONS)
     public void requestPermissions() {
-//        if (!PermissionUtil.hasPermissions(this, mDenyPerms)) {
-//            hasBasePer = false;
-//            //申请基本的权限
-//            PermissionUtil.requestPermissions(this, Permission.getPermissionContent(Arrays.asList(mDenyPerms)),
-//                    ParameterUtils.REQUEST_CODE_PERMISSIONS, mDenyPerms);
-//        } else {
-//            hasBasePer = true;
-//            hasRequestPermission();
-//        }
+        if (!PermissionUtil.hasPermissions(this, mDenyPerms)) {
+            hasBasePer = false;
+            //申请基本的权限
+            PermissionUtil.requestPermissions(this, Permission.getPermissionContent(Arrays.asList(mDenyPerms)),
+                    ParameterUtils.REQUEST_CODE_PERMISSIONS, mDenyPerms);
+        } else {
+            hasBasePer = true;
+            hasRequestPermission();
+        }
     }
 
     @Override
@@ -221,7 +221,17 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         topLine.setVisibility(visible);
     }
 
-    public View getHeadView(){return  rlytTop;}
+    public View getHeadView() {
+        return rlytTop;
+    }
+
+    public TextView getTopdefaultLefttext() {
+        return topdefaultLefttext;
+    }
+
+    public TextView getTopdefaultCentertitle() {
+        return topdefaultCentertitle;
+    }
 
     public void setTopdefaultLefttextVisible(int visible) {
         topdefaultLefttext.setVisibility(visible);
@@ -253,15 +263,15 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> denyPerms) {
-//        String[] perms = new String[denyPerms.size()];
-//        mDenyPerms = denyPerms.toArray(perms);
-//        if (PermissionUtil.shouldShowRationale(this, mDenyPerms)) {
-//            //继续申请被拒绝了的基本权限
-//            PermissionUtil.requestPermissions(this, Permission.getPermissionContent(denyPerms),
-//                    requestCode, mDenyPerms);
-//        } else {
-//            verifyPermission(denyPerms);
-//        }
+        String[] perms = new String[denyPerms.size()];
+        mDenyPerms = denyPerms.toArray(perms);
+        if (PermissionUtil.shouldShowRationale(this, mDenyPerms)) {
+            //继续申请被拒绝了的基本权限
+            PermissionUtil.requestPermissions(this, Permission.getPermissionContent(denyPerms),
+                    requestCode, mDenyPerms);
+        } else {
+            verifyPermission(denyPerms);
+        }
     }
 
     public void verifyPermission(List<String> denyPerms) {
@@ -299,6 +309,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     protected void setStatusColor(int color) {
         this.statusColor = color;
     }
+
     /**
      * 透明状态栏
      *

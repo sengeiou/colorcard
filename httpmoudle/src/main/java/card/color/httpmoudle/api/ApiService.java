@@ -27,6 +27,12 @@ public interface ApiService {
      * @return
      */
     @POST(HttpUrlUtils.URL_COMMON)
-    Observable<ResponseInfo> getApiRequset(@QueryMap Map<String, Object> params);
+    Observable<ResponseInfo> getApiRequset(@QueryMap Map<String, String> params);
+
+    @POST(HttpUrlUtils.URL_COMMON)
+    Observable<ResponseInfo> getApiRequset2(@QueryMap Map<String, String[]> params);
+
+    @GET(HttpUrlUtils.URL_COMMON)
+    Observable<ResponseInfo> getApiRequsetByGet(@QueryMap Map<String, Object> params);
 
 }

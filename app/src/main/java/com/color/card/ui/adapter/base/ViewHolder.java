@@ -1,4 +1,4 @@
-package com.smartstudy.commonlib.ui.adapter.base;
+package com.color.card.ui.adapter.base;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -23,7 +23,8 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.smartstudy.commonlib.utils.DisplayImageUtils;
+import com.color.card.util.DisplayImageUtils;
+
 
 /**
  * Created by louis on 2017/3/2.

@@ -1,4 +1,4 @@
-package com.smartstudy.commonlib.base.config.glideprogress;
+package com.color.card.base.config.glideprogress;
 
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;

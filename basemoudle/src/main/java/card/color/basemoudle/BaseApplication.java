@@ -7,6 +7,8 @@ import android.text.TextUtils;
 
 import java.util.List;
 
+import card.color.basemoudle.manager.CrashHandler;
+
 /**
  * @author yqy
  * @date on 2018/2/7
@@ -19,6 +21,7 @@ public class BaseApplication extends Application {
 
     private static BaseApplication instance;
     public static Context appContext;
+
 
     // 程序是否后台运行标志，用于标识推送消息是否需要在通知栏显示，默认程序是在后台运行的
     private boolean isBackground = true;
@@ -36,10 +39,12 @@ public class BaseApplication extends Application {
         return instance;
     }
 
+
     @Override
     public void onCreate() {
         super.onCreate();
         if (getProcessName(this).equals(getPackageName())) {
+            CrashHandler.getInstance().init(this);
             appContext = this;
             //注册容云组件
         }

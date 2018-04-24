@@ -30,7 +30,6 @@
             android:layout_marginTop="5dp"
             android:background="@drawable/bg_photo_second"
             android:gravity="center_horizontal"
-            android:text="倒计时10S"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:textColor="@color/white"

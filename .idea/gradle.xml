@@ -11,6 +11,8 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/basemoudle" />
             <option value="$PROJECT_DIR$/httpmoudle" />
+            <option value="$PROJECT_DIR$/openCVLibrary24135" />
+            <option value="$PROJECT_DIR$/oss-android-sdk" />
             <option value="$PROJECT_DIR$/permissionlib" />
           </set>
         </option>

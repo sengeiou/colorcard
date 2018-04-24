@@ -17,10 +17,8 @@ import card.color.httpmoudle.api.ApiManager;
  * @email yeqingyu@innobuddy.com
  */
 public class UserCreateModel extends BaseModel {
-
-
     public void createUser(String name, String mobile, String pwd, ObserverListener listener) {
-        Map<String, Object> params = HttpUrlUtils.getCommonMap();
+        Map<String, String> params = HttpUrlUtils.getCommonMap();
         params.put("_api", HttpUrlUtils.URL_USER_CREATE);
         params.put("name", name);
         params.put("mobile_ex", mobile);

@@ -1,4 +1,4 @@
-package com.smartstudy.counselor_t.ui.widget;
+package com.color.card.ui.widget;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">color-card</string>
+    <string name="app_name">速检</string>
     <string name="not_null">%1$s不能为空！</string>
     <string name="msg_name">消息</string>
     <string name="msg_unread">消息(%1$s)</string>
@@ -40,5 +40,18 @@
     <string name="no_qa_tip">还没有提过问题哦～</string>
     <string name="visit_count">%1$s人看过</string>
     <string name="qa_detail_title">问题详情</string>
+
+    <string name="hl_padding_out">8</string>
+    <string name="hl_left">24</string>
+    <string name="hl_in_padding">30</string>
+    <string name="hl_in_padding_out">40</string>
+    <string name="hl_in_padding2">35</string>
+    <string name="hl_stroke_hight">8</string>
+    <string name="hl_stroke_gray">4</string>
+    <string name="hl_stroke_hight2">12</string>
+
+    <string name="hl_value_padding">195</string>
+    <string name="hl_unit_padding">222</string>
+    <string name="hl_state_padding">266</string>
 
 </resources>

@@ -6,6 +6,15 @@ public class ResponseInfo {
     private String msgCode;
     private String msgInfo;
     private String model;
+    private String count;
+
+    public String getCount() {
+        return count;
+    }
+
+    public void setCount(String count) {
+        this.count = count;
+    }
 
     public String getModel() {
         return model;

@@ -1,4 +1,4 @@
-package com.smartstudy.commonlib.base.config;
+package com.color.card.base.config;
 
 import android.content.Context;
 import android.os.Handler;
@@ -10,8 +10,7 @@ import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.cache.DiskLruCacheFactory;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.module.GlideModule;
-import com.smartstudy.commonlib.base.config.https.OkHttpUrlLoader;
-import com.smartstudy.commonlib.utils.SDCardUtils;
+import com.color.card.base.config.https.OkHttpUrlLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +18,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import card.color.basemoudle.util.SDCardUtils;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -40,7 +40,7 @@ public class GlideConfiguration implements GlideModule {
     @Override
     public void applyOptions(Context context, GlideBuilder builder) {
         builder.setDecodeFormat(DecodeFormat.PREFER_ARGB_8888);
-        File cache_file = SDCardUtils.getFileDirPath("Xxd" + File.separator + "cache");
+        File cache_file = SDCardUtils.getFileDirPath("color" + File.separator + "cache");
         if (cache_file != null) {
             builder.setDiskCache(new DiskLruCacheFactory(cache_file.getAbsolutePath(), 100 * 1024 * 1024)); //100M
         }

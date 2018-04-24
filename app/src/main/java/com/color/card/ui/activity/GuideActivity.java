@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -13,9 +14,12 @@ import com.color.card.MainActivity;
 import com.color.card.R;
 import com.color.card.base.tools.SystemBarTintManager;
 import com.color.card.mvp.base.BasePresenter;
+import com.color.card.mvp.contract.GuideContract;
+import com.color.card.mvp.presenter.GuidePresenter;
 import com.color.card.ui.adapter.GuidePageAdapter;
 import com.color.card.ui.base.BaseActivity;
 import com.color.card.util.DensityUtils;
+import com.color.card.util.HandleUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +32,7 @@ import java.util.List;
  * @org xxd.smartstudy.com
  * @email yeqingyu@innobuddy.com
  */
-public class GuideActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
+public class GuideActivity extends BaseActivity<GuideContract.Presenter> implements ViewPager.OnPageChangeListener, GuideContract.View {
     private int[] imageIdArray;//图片资源的数组
     private List<View> viewList;//图片资源的集合
     private LinearLayout vg;//放置圆点
@@ -48,16 +52,15 @@ public class GuideActivity extends BaseActivity implements ViewPager.OnPageChang
     }
 
     @Override
-    public BasePresenter initPresenter() {
-        return null;
+    public GuideContract.Presenter initPresenter() {
+        return new GuidePresenter(this);
     }
 
     @Override
     public void initView() {
 //        SPCacheUtils.put("hasGuide", true);
 //        initSysBar();
-        tv_clickenter =  findViewById(R.id.tv_clickenter);
-        tv_registerr = findViewById(R.id.tv_registerr);
+        tv_clickenter = findViewById(R.id.tv_clickenter);
         //加载ViewPager
         initViewPager();
         //加载底部圆点
@@ -82,7 +85,6 @@ public class GuideActivity extends BaseActivity implements ViewPager.OnPageChang
     @Override
     public void initEvent() {
         tv_clickenter.setOnClickListener(this);
-        tv_registerr.setOnClickListener(this);
     }
 
 
@@ -90,13 +92,9 @@ public class GuideActivity extends BaseActivity implements ViewPager.OnPageChang
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_clickenter:
-                startActivity(new Intent(GuideActivity.this, LoginActivity.class));
-                finish();
+                presenter.loginAutomatic();
                 break;
 
-            case R.id.tv_registerr:
-                startActivity(new Intent(GuideActivity.this, RegisterActivity.class));
-                break;
             default:
                 break;
         }
@@ -139,11 +137,11 @@ public class GuideActivity extends BaseActivity implements ViewPager.OnPageChang
     private void initViewPager() {
         ViewPager vp = (ViewPager) findViewById(R.id.guide_vp);
         //实例化图片资源
-        imageIdArray = new int[]{R.drawable.img_guide1, R.drawable.img_guide2, R.drawable.img_guide3};
+        imageIdArray = new int[]{R.drawable.img_guide1, R.drawable.img_guide2};
         viewList = new ArrayList<>();
         //获取一个Layout参数，设置为全屏
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         //循环创建View并加入到集合中
         int len = imageIdArray.length;
         ImageView imageView;
@@ -180,10 +178,10 @@ public class GuideActivity extends BaseActivity implements ViewPager.OnPageChang
         }
         //判断是否是最后一页，若是则显示按钮
         if (position == imageIdArray.length - 1) {
-//            tv_clickenter.setVisibility(View.VISIBLE);
+            tv_clickenter.setVisibility(View.VISIBLE);
             vg.setVisibility(View.GONE);
         } else {
-//            tv_clickenter.setVisibility(View.GONE);
+            tv_clickenter.setVisibility(View.GONE);
             vg.setVisibility(View.VISIBLE);
         }
     }
@@ -215,5 +213,17 @@ public class GuideActivity extends BaseActivity implements ViewPager.OnPageChang
     protected void onDestroy() {
         releaseRes();
         super.onDestroy();
+    }
+
+    @Override
+    public void getUserInfoSuccess() {
+
+    }
+
+    @Override
+    public void loginAutomaticSuccess() {
+        presenter.getUserInfo();
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 }

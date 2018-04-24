@@ -16,7 +16,7 @@
  *
  */
 
-package com.example.yqy.myapplication.ui.activity;
+package com.color.card.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -28,8 +28,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -40,26 +38,22 @@ import android.widget.Toast;
 
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.example.yqy.myapplication.MMCQ;
-import com.example.yqy.myapplication.R;
-import com.example.yqy.myapplication.ui.widget.ClipImageLayout;
-import com.example.yqy.myapplication.util.ActionSheetDialog;
-import com.example.yqy.myapplication.util.DisplayImageUtils;
-import com.example.yqy.myapplication.util.HSVUtil;
-import com.example.yqy.myapplication.util.ParameterUtils;
-import com.example.yqy.myapplication.util.PhotoUtil;
-import com.example.yqy.myapplication.util.SDCardUtils;
-import com.example.yqy.myapplication.util.Utils;
-import com.soundcloud.android.crop.Crop;
+import com.color.card.R;
+import com.color.card.ui.widget.ClipImageLayout;
+import com.color.card.util.DisplayImageUtils;
+import com.color.card.util.HSVUtil;
+import com.color.card.util.MMCQ;
+import com.color.card.util.PhotoUtil;
+import com.color.card.util.Utils;
 
-import java.io.BufferedOutputStream;
+
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.content.ContentValues.TAG;
+import card.color.basemoudle.util.ParameterUtils;
+import card.color.basemoudle.util.SDCardUtils;
 
 
 /**
@@ -91,7 +85,7 @@ public class SampleMainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_sample);
 
         ivIcon = findViewById(R.id.iv_icon);
 
@@ -99,11 +93,11 @@ public class SampleMainActivity extends Activity {
 
         tvDistance = findViewById(R.id.tv_distance);
 
-        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.photo1);
+//        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic);
 
-        if (icon != null) {
-            showMainColor(icon);
-        }
+//        if (icon != null) {
+//            showMainColor(icon);
+//        }
         findViewById(R.id.bt_jump).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,23 +110,23 @@ public class SampleMainActivity extends Activity {
     }
 
 
-    protected void options() {
-        ActionSheetDialog mDialog = new ActionSheetDialog(this).builder();
-        mDialog.setTitle("选择");
-        mDialog.setCancelable(false);
-        mDialog.addSheetItem("拍照", ActionSheetDialog.SheetItemColor.Blue, new ActionSheetDialog.OnSheetItemClickListener() {
-            @Override
-            public void onClick(int which) {
-                PhotoUtil.photograph(SampleMainActivity.this);
-            }
-        }).addSheetItem("从相冊选取", ActionSheetDialog.SheetItemColor.Blue, new ActionSheetDialog.OnSheetItemClickListener() {
-            @Override
-            public void onClick(int which) {
-                PhotoUtil.selectPictureFromAlbum(SampleMainActivity.this);
-            }
-        }).show();
-    }
-
+//    protected void options() {
+//        ActionSheetDialog mDialog = new ActionSheetDialog(this).builder();
+//        mDialog.setTitle("选择");
+//        mDialog.setCancelable(false);
+//        mDialog.addSheetItem("拍照", ActionSheetDialog.SheetItemColor.Blue, new ActionSheetDialog.OnSheetItemClickListener() {
+//            @Override
+//            public void onClick(int which) {
+//                PhotoUtil.photograph(SampleMainActivity.this);
+//            }
+//        }).addSheetItem("从相冊选取", ActionSheetDialog.SheetItemColor.Blue, new ActionSheetDialog.OnSheetItemClickListener() {
+//            @Override
+//            public void onClick(int which) {
+//                PhotoUtil.selectPictureFromAlbum(SampleMainActivity.this);
+//            }
+//        }).show();
+//    }
+//
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -148,27 +142,6 @@ public class SampleMainActivity extends Activity {
         }
         switch (requestCode) {
             case ParameterUtils.REQUEST_CODE_CHANGEPHOTO:
-                if ("from_capture".equals(data.getStringExtra("flag_from"))) {
-                    photoSaveName = System.currentTimeMillis() + ".png";
-                    photoSaveFile = SDCardUtils.getFileDirPath("Xxd" + File.separator + "pictures");// 存放照片的文件夹
-                    Utils.startActionCapture(SampleMainActivity.this, new File(photoSaveFile.getAbsolutePath(), photoSaveName), ParameterUtils.REQUEST_CODE_CAMERA);
-                }
-                if ("from_album".equals(data.getStringExtra("flag_from"))) {
-                    selected_path = data.getStringExtra("path");
-                    Intent toClipImage = new Intent(SampleMainActivity.this, ClipPictureActivity.class);
-                    toClipImage.putExtra("path", selected_path);
-                    toClipImage.putExtra("clipType", ClipImageLayout.SQUARE);
-                    this.startActivityForResult(toClipImage, ParameterUtils.REQUEST_CODE_CLIP_OVER);
-                }
-                break;
-            case ParameterUtils.REQUEST_CODE_CAMERA:
-                String path_capture = photoSaveFile.getAbsolutePath() + "/" + photoSaveName;
-                Intent toClipImage = new Intent(getApplicationContext(), ClipPictureActivity.class);
-                toClipImage.putExtra("path", path_capture);
-                toClipImage.putExtra("clipType", ClipImageLayout.SQUARE);
-                startActivityForResult(toClipImage, ParameterUtils.REQUEST_CODE_CLIP_OVER);
-                break;
-            case ParameterUtils.REQUEST_CODE_CLIP_OVER:
                 final String temppath = data.getStringExtra("path");
                 DisplayImageUtils.downloadImageFile(getApplicationContext(), temppath, new SimpleTarget<File>() {
 
@@ -178,11 +151,20 @@ public class SampleMainActivity extends Activity {
                         DisplayImageUtils.displayPersonRes(SampleMainActivity.this, resource, ivIcon);
                         Bitmap bitmap = BitmapFactory.decodeFile(resource.getPath());
                         showMainColor(bitmap);
-                        tvDistance.setText(HSVUtil.distanceOf(getBZHSVUtil(), new HSVUtil(171, 87, 206)) + "");
-
+                        tvDistance.setText(HSVUtil.distanceOf(getBZHSVUtil(), new HSVUtil(0, 0, 100)) + "");
 
                     }
                 });
+                break;
+            case ParameterUtils.REQUEST_CODE_CAMERA:
+                String path_capture = photoSaveFile.getAbsolutePath() + "/" + photoSaveName;
+                Intent toClipImage = new Intent(getApplicationContext(), ClipPictureActivity.class);
+                toClipImage.putExtra("path", path_capture);
+                toClipImage.putExtra("clipType", ClipImageLayout.SQUARE);
+                startActivityForResult(toClipImage, ParameterUtils.REQUEST_CODE_CLIP_OVER);
+                break;
+            case ParameterUtils.REQUEST_CODE_CLIP_OVER:
+
                 break;
 
             default:
@@ -278,7 +260,6 @@ public class SampleMainActivity extends Activity {
         findViewById(R.id.dominant_color).setBackgroundColor(
                 Color.rgb(dominantColor[0], dominantColor[1], dominantColor[2]));
 
-        Log.w("kim", "r-->" + dominantColor[0] + "====" + "g---->" + dominantColor[1] + "====" + "b--->" + dominantColor[2]);
         LinearLayout palette = (LinearLayout) findViewById(R.id.palette);
         palette.removeAllViews();
         for (int i = 0; i < result.size(); i++) {
@@ -303,27 +284,27 @@ public class SampleMainActivity extends Activity {
     }
 
 
-    private void beginCrop(Uri source) {
-        Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped"));
-        Crop.of(source, destination).asSquare().start(this);
-    }
+//    private void beginCrop(Uri source) {
+//        Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped"));
+//        Crop.of(source, destination).asSquare().start(this);
+//    }
 
-    private void handleCrop(int resultCode, Intent result) {
-//        int hsv=Color.HSVToColor()
-        if (resultCode == RESULT_OK) {
-            ivIcon.setImageDrawable(null);
-            ivIcon.setImageURI(Crop.getOutput(result));
-            try {
-                showMainColor(PhotoUtil.converToBitmapByUri(this, Crop.getOutput(result)));
-                Log.w("kim","h--->"+getBZHSVUtil().getH()+"s---->"+getBZHSVUtil().getS()+"v--->"+getBZHSVUtil().getV());
-                tvDistance.setText(HSVUtil.distanceOf(getBZHSVUtil(), new HSVUtil(171, 89, 206)) + "");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (resultCode == Crop.RESULT_ERROR) {
-            Toast.makeText(this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
+//    private void handleCrop(int resultCode, Intent result) {
+////        int hsv=Color.HSVToColor()
+//        if (resultCode == RESULT_OK) {
+//            ivIcon.setImageDrawable(null);
+//            ivIcon.setImageURI(Crop.getOutput(result));
+//            try {
+//                showMainColor(PhotoUtil.converToBitmapByUri(this, Crop.getOutput(result)));
+//                Log.w("kim","h--->"+getBZHSVUtil().getH()+"s---->"+getBZHSVUtil().getS()+"v--->"+getBZHSVUtil().getV());
+//                tvDistance.setText(HSVUtil.distanceOf(getBZHSVUtil(), new HSVUtil(171, 89, 206)) + "");
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        } else if (resultCode == Crop.RESULT_ERROR) {
+//            Toast.makeText(this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
 
     private HSVUtil getBZHSVUtil() {

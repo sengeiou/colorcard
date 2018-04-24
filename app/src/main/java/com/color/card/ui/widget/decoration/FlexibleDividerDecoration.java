@@ -1,4 +1,4 @@
-package com.smartstudy.commonlib.ui.customview.decoration;
+package com.color.card.ui.widget.decoration;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -266,7 +266,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
     public interface PaintProvider {
 
         /**
-         * Returns {@link android.graphics.Paint} for divider
+         * Returns {@link Paint} for divider
          *
          * @param position Divider position (or group index for GridLayoutManager)
          * @param parent   RecyclerView
